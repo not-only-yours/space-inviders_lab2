@@ -15,19 +15,19 @@ def createStartMatrix():
     for j in range(gv.currPoint[0] - 25, gv.currPoint[0] + 25):
         for k in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
             if 0 < j < len(Matrix) and 0 < k < len(Matrix):
-                Matrix[k][j] = 1
-
-    for i in gv.ENEMIES:
-        for j in range(i.x - 20, i.x + 20):
-            for k in range(i.y - 20, i.y + 20):
-                if 0 < j < len(Matrix) and 0 < k < len(Matrix):
-                    Matrix[j][k] = 2
+                Matrix[j][k] = 1
 
     for i in gv.ASTEROIDS:
         for j in range(i.x - 20, i.x + 20):
             for k in range(i.y - 20, i.y + 20):
                 if 0 < j < len(Matrix) and 0 < k < len(Matrix):
                     Matrix[j][k] = 3
+
+    for i in gv.ENEMIES:
+        for j in range(i.x - 20, i.x + 20):
+            for k in range(i.y - 20, i.y + 20):
+                if 0 < j < len(Matrix) and 0 < k < len(Matrix):
+                    Matrix[j][k] = 2
 
 
 def dfs():
@@ -123,41 +123,41 @@ def baskMoveFromLeft():
 
 def baskMoveFromRight():
     for j in range(gv.currPoint[0] - 25, gv.currPoint[0] + 25):
-            if 0 < j < len(Matrix) and 0 <  gv.currPoint[1] + 26< len(Matrix):
-                Matrix[j][ gv.currPoint[1] + 26] = 4
+        if 0 < j < len(Matrix) and 0 < gv.currPoint[1] + 26 < len(Matrix):
+            Matrix[j][gv.currPoint[1] + 26] = 4
     gv.currPoint = [gv.currPoint[0], gv.currPoint[1] - 1]
 
 
 def canGoUp():
     for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
         if 0 <= gv.currPoint[0] + 26 < 750 and 0 <= gv.currPoint[1] - 25 < 750:
-            if Matrix[gv.currPoint[1] + 26][i] == 2:
-                return False
-    return True
+            if Matrix[gv.currPoint[0] + 26][i] == 0:
+                return True
+    return False
 
 
 def canGoDown():
     for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
         if 0 <= gv.currPoint[0] - 26 < 750 and 0 <= gv.currPoint[1] + 25 < 750:
-            if Matrix[gv.currPoint[1] - 26][i] == 2:
-                return False
-    return True
+            if Matrix[gv.currPoint[0] - 26][i] == 0:
+                return True
+    return False
 
 
 def canGoLeft():
     for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
-        if 0 <= gv.currPoint[0] - 26 < 750 and 0 <= gv.currPoint[1] + 25 < 750:
-            if Matrix[i][gv.currPoint[0] - 26] == 2:
-                return False
-    return True
+        if 0 <= gv.currPoint[0] < 750 and 0 <= gv.currPoint[1] + 26 < 750:
+            if Matrix[i][gv.currPoint[1] - 26] == 0:
+                return True
+    return False
 
 
 def canGoRight():
     for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
         if 0 <= gv.currPoint[0] + 26 < 750 and 0 <= gv.currPoint[1] - 25 < 750:
-            if Matrix[gv.currPoint[1] + 26][i] != 0:
-                return False
-    return True
+            if Matrix[i][gv.currPoint[1] + 26] == 0:
+                return True
+    return False
 
 
 def isThereEnd():
@@ -165,16 +165,13 @@ def isThereEnd():
         if 0 <= gv.currPoint[0] + 26 < 750 and 0 <= gv.currPoint[1] - 25 < 750:
             if Matrix[gv.currPoint[1] + 26][i] == 2:
                 return True
-    for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
         if 0 <= gv.currPoint[0] - 26 < 750 and 0 <= gv.currPoint[1] + 25 < 750:
             if Matrix[gv.currPoint[1] - 26][i] == 2:
                 return True
-    for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
         if 0 <= gv.currPoint[0] - 26 < 750 and 0 <= gv.currPoint[1] + 25 < 750:
             if Matrix[i][gv.currPoint[0] - 26] == 2:
                 return True
-    for i in range(gv.currPoint[1] - 25, gv.currPoint[1] + 25):
         if 0 <= gv.currPoint[0] + 26 < 750 and 0 <= gv.currPoint[1] - 25 < 750:
-            if Matrix[gv.currPoint[1] + 26][i] != 0:
+            if Matrix[gv.currPoint[1] + 26][i] == 2:
                 return True
     return False

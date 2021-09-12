@@ -2,7 +2,7 @@ import GlobalVariables as gv
 
 
 class Ship:
-    COOLDOWN = 30 # час перезарядки човна
+    COOLDOWN = 20 # час перезарядки човна
 
     def __init__(self, x, y, health=100):
         self.x = x
@@ -105,9 +105,9 @@ class Asteroid:
 
 
 def create_asteroids():
-    for i in range(30):  # створення масиву з ворогів
-        asteroids = Asteroid(gv.RANDOM_LIB.randrange(0, 750),
-                             gv.RANDOM_LIB.randrange(-200, 750),
+    for i in range(150):  # створення масиву з ворогів
+        asteroids = Asteroid(gv.RANDOM_LIB.randrange(0, 50) * 50,
+                             gv.RANDOM_LIB.randrange(0, 50) * 50 - 300,
                              )  # створення місця та колір ворога
         gv.ASTEROIDS.append(asteroids)
 

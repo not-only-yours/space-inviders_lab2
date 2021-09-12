@@ -1,5 +1,5 @@
 import GlobalVariables as gv
-import Algorytms
+
 
 def main():
     gv.CAN_EDIT = True
@@ -25,7 +25,7 @@ def main():
             gv.LEVEL += 1
             gv.WAVE_LENGTH += 5
             for i in range(gv.WAVE_LENGTH):         # створення масиву з ворогів
-                enemy = gv.ShipCreator.Enemy(gv.RANDOM_LIB.randrange(50, gv.WIDTH - 100),
+                enemy = gv.ShipCreator.Enemy(gv.RANDOM_LIB.randrange(0, 4) * 150,
                                              gv.RANDOM_LIB.randrange(-1500, -100),
                                              gv.RANDOM_LIB.choice(["red", "blue", "purple"])) # створення місця та колір ворога
                 gv.ENEMIES.append(enemy)
@@ -45,14 +45,14 @@ def main():
         if keys[gv.PG_LIB.K_SPACE]:
             gv.GOOD_SHIP.shoot()
         if keys[gv.PG_LIB.K_z]:
-            gv.ASTEROIDS = []
-            gv.ShipCreator.create_asteroids()
-            Algorytms.createStartMatrix()
-            gv.currPoint = [gv.GOOD_SHIP.x, gv.GOOD_SHIP.y]
-            Algorytms.dfs()
-            #
-            # for line in Algorytms.Matrix:
-            #     print(*line)
+            if gv.currAlg == "dfs":
+                print("algorithm switched to bfs")
+                gv.currAlg = "bfs"
+            if gv.currAlg == "bfs":
+                gv.currAlg = "dfs"
+                print("algorithm switched to dfs")
+
+
         for enemy in gv.ENEMIES[:]:
             enemy.move(gv.ENEMY_VEL)
             enemy.move_lasers(gv.LASER_VEL, gv.GOOD_SHIP)

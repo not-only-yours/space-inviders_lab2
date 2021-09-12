@@ -22,14 +22,14 @@ def createStartMatrix():
         for j in range(int((i.x - 20) / 50), int((i.x + 20) / 50)):
             for k in range(int((i.y - 20) / 50), int((i.y + 20) / 50)):
                 if 0 < j < len(matrix) and 0 < k < len(matrix):
-                    matrix[j][k] = 3
-                    gv.VisitMatrix[j][k] = 1
+                    matrix[k][j] = 3
+                    gv.VisitMatrix[k][j] = 1
     for i in gv.ENEMIES:
         for j in range(int((i.x - 20) / 50), int((i.x + 20) / 50)):
             for k in range(int((i.y - 20) / 50), int((i.y + 20) / 50)):
                 if 0 < j < len(matrix) and 0 < k < len(matrix):
-                    matrix[j][k] = 2
-                    gv.VisitMatrix[j][k] = 1
+                    matrix[k][j] = 2
+                    gv.VisitMatrix[k][j] = 1
 
     matrix[0][0] = 0
     matrix[int(gv.currPoint[1])][int(gv.currPoint[0])] = 1

@@ -38,41 +38,12 @@ def updateFrame(): # оновлення фрейму
     # dfs
     gv.enemyCount = 0
 
-    for i in Algorytms.Matrix:
+    for i in Algorytms.matrix:
         for j in i:
             if j == 2:
                 gv.enemyCount += 1
     # print(gv.enemyCount)
-    if gv.currAlg == "dfs":
-        Algorytms.createStartMatrix()
-        for i in range(gv.enemyCount):
-            Algorytms.createStartMatrix()
-            if gv.findedPoints:
-                for i in gv.findedPoints:
-                    Algorytms.Matrix[i[0]][i[1]] = 3
-                    gv.VisitMatrix[i[0]][i[1]] = 1
-            gv.currPoint = [int(gv.GOOD_SHIP.x/50), int(gv.GOOD_SHIP.y/50)]
-            gv.path.append(gv.currPoint)
-            Algorytms.dfs()
-        # if gv.dfsArrayOfPath:
-        #     for i in gv.dfsArrayOfPath:
-        #         print(i)
-        for line in Algorytms.Matrix:
-            print(*line)
 
-    if gv.currAlg == "bfs":
-        for i in range(gv.enemyCount):
-            Algorytms.createStartMatrix()
-            if gv.findedPoints:
-                for i in gv.findedPoints:
-                    Algorytms.Matrix[i[0]][i[1]] = 3
-                    gv.VisitMatrix[i[0]][i[1]] = 1
-            gv.currPoint = [int(gv.GOOD_SHIP.x / 50), int(gv.GOOD_SHIP.y / 50)]
-            gv.path.append(gv.currPoint)
-            Algorytms.bfs()
-        # if gv.bfsArrayOfPath:
-        #     for i in gv.bfsArrayOfPath:
-        #         print(i)
 
 
     # print(len(Algorytms.Matrix))

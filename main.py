@@ -1,5 +1,5 @@
 import GlobalVariables as gv
-
+import Algorytms
 
 def main():
     gv.CAN_EDIT = True
@@ -45,12 +45,34 @@ def main():
         if keys[gv.PG_LIB.K_SPACE]:
             gv.GOOD_SHIP.shoot()
         if keys[gv.PG_LIB.K_z]:
+            Algorytms.createStartMatrix()
+            print(Algorytms.matrix)
             if gv.currAlg == "dfs":
-                print("algorithm switched to bfs")
-                gv.currAlg = "bfs"
+                while Algorytms.numofEnemy > 0:
+                    if len(Algorytms.path) > 1:
+                        Algorytms.matrix[Algorytms.path[-1][0]][Algorytms.path[-1][1]] = 3
+                        Algorytms.arrOfPath.append(Algorytms.path)
+                        Algorytms.path = [Algorytms.arrOfPath[0][0]]
+                        Algorytms.numofEnemy -= 1
+                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                    Algorytms.dfs(Algorytms.matrix, Algorytms.visitMatrix)
+                for i in Algorytms.arrOfPath:
+                    print(*i)
+
             if gv.currAlg == "bfs":
-                gv.currAlg = "dfs"
-                print("algorithm switched to dfs")
+                while Algorytms.numofEnemy > 0:
+                    # print(path)
+                    if len(Algorytms.listOfVisited) > 1:
+                        Algorytms.matrix[Algorytms.listOfVisited[-1][0]][Algorytms.listOfVisited[-1][1]] = 3
+                        # print(arrBeforePath)
+                        Algorytms.arrOfList.append(Algorytms.arrBeforePath)
+                        Algorytms.arrOfList.append(Algorytms.listOfVisited)
+                        listOfVisited = [Algorytms.arrOfList[0][0]]
+                        Algorytms.numofEnemy -= 1
+                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                    Algorytms.bfs(Algorytms.matrix, Algorytms.visitMatrix)
+                for i in Algorytms.arrOfList:
+                    print(*i)
 
 
         for enemy in gv.ENEMIES[:]:

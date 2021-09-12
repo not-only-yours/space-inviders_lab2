@@ -18,7 +18,7 @@ LaserCreator = LaserCreator
 
 # Created global variables of Integer values
 LOST = False
-FPS = 120
+FPS = 60
 LEVEL = 1
 LIVES = 5
 SCORE = 0

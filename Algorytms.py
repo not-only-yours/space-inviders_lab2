@@ -76,19 +76,19 @@ def dfs(matrix, visitMatrix, curX=path[-1][0], curY=path[-1][1]):
             visitMatrix[curX + 1][curY] = 1
             path.append([curX + 1, curY])
             step = True
-        if curY + 1 < len(matrix) and visitMatrix[curX][curY + 1] == 0 and not step:
+        elif curY + 1 < len(matrix) and visitMatrix[curX][curY + 1] == 0 and not step:
             visitMatrix[curX][curY + 1] = 1
             path.append([curX, curY + 1])
             step = True
-        if curY - 1 >= 0 and visitMatrix[curX][curY - 1] == 0 and not step:
+        elif curY - 1 >= 0 and visitMatrix[curX][curY - 1] == 0 and not step:
             visitMatrix[curX][curY - 1] = 1
             path.append([curX, curY - 1])
             step = True
-        if curX - 1 >= 0 and visitMatrix[curX - 1][curY] == 0 and not step:
+        elif curX - 1 >= 0 and visitMatrix[curX - 1][curY] == 0 and not step:
             visitMatrix[curX - 1][curY] = 1
             path.append([curX - 1, curY])
             step = True
-        if not step:
+        elif not step:
             path.remove(path[-1])
 
 

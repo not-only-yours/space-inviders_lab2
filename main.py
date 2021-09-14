@@ -50,9 +50,18 @@ def main():
         #         gv.pixelPath.append(pix)
         #         for pixel in gv.pixelPath:
         #             pixel.draw()
-
-
         if keys[gv.PG_LIB.K_z]:
+            if gv.currAlg == "dfs":
+                print("current alg bfs")
+                gv.currAlg = "bfs"
+            elif gv.currAlg == "bfs":
+                print("current alg ucs")
+                gv.currAlg = "ucs"
+            elif gv.currAlg == "ucs":
+                print("current alg dfs")
+                gv.currAlg = "dfs"
+
+        if keys[gv.PG_LIB.K_x]:
             Algorytms.createStartMatrix()
             print(Algorytms.matrix)
             if gv.currAlg == "dfs":

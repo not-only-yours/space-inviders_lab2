@@ -8,13 +8,17 @@ import numpy
 
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 visitMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
+lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 path = [[14, 6]]
 numofEnemy = 1 # TODO: get num from matrix
 arrOfPath = []
 listOfVisited = [[14, 6]]
 arrOfList = []
 arrBeforePath = []
-
+ucsList = []
+arrUcsList = []
+enemyCoords = []
+ucsListOfVisited = [[14, 6]]
 
 
 def createStartMatrix():
@@ -31,6 +35,14 @@ def createStartMatrix():
                     matrix[k][j] = 2
                     gv.VisitMatrix[k][j] = 1
 
+    # global numofEnemy, path
+    # for i in matrix:
+    #     for j in i:
+    #         if j == 2:
+    #             numofEnemy += 1
+    #         if j == 1:
+    #             path = [[int(gv.GOOD_SHIP.x / 50), int(gv.GOOD_SHIP.y / 50)]]
+
     matrix[0][0] = 0
     matrix[int(gv.currPoint[1])][int(gv.currPoint[0])] = 1
     gv.VisitMatrix[int(gv.currPoint[1])][int(gv.currPoint[0])] = 1
@@ -45,7 +57,6 @@ def createVisitMatrix(matrix, visitMatrix):
                 visitMatrix[i][j] = 1
             else:
                 visitMatrix[i][j] = 0
-
 
 def dfs(matrix, visitMatrix, curX=path[-1][0], curY=path[-1][1]):
     # print(path)
@@ -133,4 +144,73 @@ def bfs(matrix, visitMatrix, curX=listOfVisited[-1][0], curY=listOfVisited[-1][1
             listOfVisited.append([curX - 1, curY])
         arrBeforePath.append(path[-1])
         listOfVisited.remove(listOfVisited[0])
+
+
+
+
+
+def ucs(matrix, visitMatrix, curX=ucsListOfVisited[-1][0], curY=ucsListOfVisited[-1][1]):
+    ucsListOfVisited.append([curX, curY])
+    while len(ucsListOfVisited) > 0:
+        # print(ucsListOfVisited)
+        # for i in visitMatrix:
+        #     print(*i)
+        curX = ucsListOfVisited[0][0]
+        curY = ucsListOfVisited[0][1]
+        if curX + 1 < len(matrix) and matrix[curX + 1][curY] == 2:
+            ucsListOfVisited.append([curX + 1, curY])
+            break
+        elif curY + 1 < len(matrix) and matrix[curX][curY + 1] == 2:
+            ucsListOfVisited.append([curX, curY + 1])
+            break
+        elif curX - 1 >= 0 and matrix[curX - 1][curY] == 2:
+            ucsListOfVisited.append([curX - 1, curY])
+            break
+        elif curY - 1 >= 0 and matrix[curX][curY - 1] == 2:
+            ucsListOfVisited.append([curX, curY - 1])
+            break
+        step = False
+        # print(path)
+        # for i in visitMatrix:
+        #     print(*i)
+        if curX + 1 < len(matrix) and visitMatrix[curX + 1][curY] == 0:
+            if lenMatrix[curX + 1][curY] == 0:
+                lenMatrix[curX + 1][curY] = lenMatrix[curX][curY] + 1
+            elif lenMatrix[curX + 1][curY] > lenMatrix[curX][curY] + 1:
+                lenMatrix[curX + 1][curY] = lenMatrix[curX][curY] + 1
+            visitMatrix[curX + 1][curY] = 1
+            ucsListOfVisited.append([curX + 1, curY])
+
+        if curY + 1 < len(matrix) and visitMatrix[curX][curY + 1] == 0:
+            if lenMatrix[curX][curY + 1] == 0:
+                lenMatrix[curX][curY + 1] = lenMatrix[curX][curY] + 1
+            elif lenMatrix[curX][curY + 1] > lenMatrix[curX][curY] + 1:
+                lenMatrix[curX][curY + 1] = lenMatrix[curX][curY] + 1
+            visitMatrix[curX][curY + 1] = 1
+            ucsListOfVisited.append([curX, curY + 1])
+
+        if curY - 1 >= 0 and visitMatrix[curX][curY - 1] == 0:
+            if lenMatrix[curX][curY - 1] == 0:
+                lenMatrix[curX][curY - 1] = lenMatrix[curX][curY] + 1
+            elif lenMatrix[curX][curY - 1] > lenMatrix[curX][curY] + 1:
+                lenMatrix[curX][curY - 1] = lenMatrix[curX][curY] + 1
+            visitMatrix[curX][curY - 1] = 1
+            ucsListOfVisited.append([curX, curY - 1])
+
+        if curX - 1 >= 0 and visitMatrix[curX - 1][curY] == 0:
+            if lenMatrix[curX - 1][curY] == 0:
+                lenMatrix[curX - 1][curY] = lenMatrix[curX][curY] + 1
+            elif lenMatrix[curX - 1][curY] > lenMatrix[curX][curY] + 1:
+                lenMatrix[curX - 1][curY] = lenMatrix[curX][curY] + 1
+            visitMatrix[curX - 1][curY] = 1
+            ucsListOfVisited.append([curX - 1, curY])
+        arrBeforePath.append(path[-1])
+        ucsListOfVisited.remove(ucsListOfVisited[0])
+
+
+def findEnemyCoords(matrix):
+    for i in range(len(matrix)):
+        for j in range(len(matrix[i])):
+            if matrix[i][j] == 0:
+                enemyCoords.append([i, j])
 

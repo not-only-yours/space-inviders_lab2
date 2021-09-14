@@ -83,4 +83,5 @@ path = []
 VisitMatrix = numpy.full((int(WIDTH / 50), int(HEIGHT / 50)), 0)
 findedPoints = []
 enemyCount = 0
-currAlg = "dfs"
+currAlg = "ucs"
+used = False

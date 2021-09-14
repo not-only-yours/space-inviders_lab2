@@ -1,22 +1,21 @@
 import GlobalVariables as gv
 import Algorytms
 
-
 def main():
     gv.CAN_EDIT = True
-    gv.PG_LIB.display.set_caption("Space Invaders")  # Назва застосунку
+    gv.PG_LIB.display.set_caption("Space Invaders") # Назва застосунку
 
     run = True
     clock = gv.PG_LIB.time.Clock()
     while run:
-        clock.tick(gv.FPS)  # Виставлено кількість оновлень у секунду
+        clock.tick(gv.FPS)  #Виставлено кількість оновлень у секунду
 
         gv.FrameCreator_LIB.updateFrame()
-        if gv.LIVES <= 0 or gv.GOOD_SHIP.health <= 0:  # умови програшу
+        if gv.LIVES <= 0 or gv.GOOD_SHIP.health <= 0: # умови програшу
             gv.LOST = True
             gv.LOST_COUNT += 1
 
-        if gv.LOST:  # час показання екрану програшу
+        if gv.LOST:         # час показання екрану програшу
             if gv.LOST_COUNT > gv.FPS * 3:
                 run = False
 
@@ -25,17 +24,16 @@ def main():
         if len(gv.ENEMIES) == 0:  # збільшення рівня складності
             gv.LEVEL += 1
             gv.WAVE_LENGTH += 5
-            for i in range(gv.WAVE_LENGTH):  # створення масиву з ворогів
+            for i in range(gv.WAVE_LENGTH):         # створення масиву з ворогів
                 enemy = gv.ShipCreator.Enemy(gv.RANDOM_LIB.randrange(0, 4) * 150,
                                              gv.RANDOM_LIB.randrange(-1500, -100),
-                                             gv.RANDOM_LIB.choice(
-                                                 ["red", "blue", "purple"]))  # створення місця та колір ворога
+                                             gv.RANDOM_LIB.choice(["red", "blue", "purple"])) # створення місця та колір ворога
                 gv.ENEMIES.append(enemy)
         for event in gv.PG_LIB.event.get():
             if event.type == gv.PG_LIB.QUIT:
                 run = False
 
-        keys = gv.PG_LIB.key.get_pressed()  # рух корабля по натиску на клавішу та стрільба
+        keys = gv.PG_LIB.key.get_pressed()   # рух корабля по натиску на клавішу та стрільба
         if keys[gv.PG_LIB.K_a] and gv.GOOD_SHIP.x - gv.PLAYER_VEL > 0:  # left
             gv.GOOD_SHIP.x -= gv.PLAYER_VEL
         if keys[gv.PG_LIB.K_d] and gv.GOOD_SHIP.x + gv.PLAYER_VEL + gv.GOOD_SHIP_SIZEX < gv.WIDTH:  # right
@@ -46,22 +44,15 @@ def main():
             gv.GOOD_SHIP.y += gv.PLAYER_VEL
         if keys[gv.PG_LIB.K_SPACE]:
             gv.GOOD_SHIP.shoot()
+        # if keys[gv.PG_LIB.K_x]:
+        #     for i in Algorytms.arrOfList:
+        #         pix = gv.sc.Pixel(i[0] * 50, i[1] * 50)
+        #         gv.pixelPath.append(pix)
+        #         for pixel in gv.pixelPath:
+        #             pixel.draw()
+
+
         if keys[gv.PG_LIB.K_z]:
-            if not gv.used:
-                if gv.currAlg == "dfs":
-                    print("current algorithm is bfs")
-                    gv.currAlg = "bfs"
-                    gv.used = True
-                elif gv.currAlg == "bfs":
-                    print("current algorithm is ucs")
-                    gv.currAlg = "ucs"
-                    gv.used = True
-                elif gv.currAlg == "ucs":
-                    print("current algorithm is dfs")
-                    gv.currAlg = "dfs"
-                    gv.used = True
-        if keys[gv.PG_LIB.K_x]:
-            gv.used = False
             Algorytms.createStartMatrix()
             print(Algorytms.matrix)
             if gv.currAlg == "dfs":
@@ -71,8 +62,8 @@ def main():
                         Algorytms.arrOfPath.append(Algorytms.path)
                         Algorytms.path = [Algorytms.arrOfPath[0][0]]
                         Algorytms.numofEnemy -= 1
-                        Algorytms.createVisitMatrix(Algorytms.matrix, gv.VisitMatrix)
-                    Algorytms.dfs(Algorytms.matrix, gv.VisitMatrix)
+                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                    Algorytms.dfs(Algorytms.matrix, Algorytms.visitMatrix)
                 for i in Algorytms.arrOfPath:
                     print(*i)
 
@@ -86,12 +77,11 @@ def main():
                         Algorytms.arrOfList.append(Algorytms.listOfVisited)
                         listOfVisited = [Algorytms.arrOfList[0][0]]
                         Algorytms.numofEnemy -= 1
-                        Algorytms.createVisitMatrix(Algorytms.matrix, gv.VisitMatrix)
-                    Algorytms.bfs(Algorytms.matrix, gv.VisitMatrix)
+                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                    Algorytms.bfs(Algorytms.matrix, Algorytms.visitMatrix)
                 for i in Algorytms.arrOfList:
                     print(*i)
             if gv.currAlg == "ucs":
-
                 while Algorytms.numofEnemy > 0:
                     # print(path)
                     if len(Algorytms.ucsListOfVisited) > 1:
@@ -99,11 +89,13 @@ def main():
                         # print(arrBeforePath)
                         Algorytms.arrOfList.append(Algorytms.arrBeforePath)
                         Algorytms.arrOfList.append(Algorytms.ucsListOfVisited)
-                        ucsListOfVisited = [Algorytms.arrOfList[0][0]]
+                        Algorytms.ucsListOfVisited = [Algorytms.arrOfList[0][0]]
                         Algorytms.numofEnemy -= 1
-                        Algorytms.createVisitMatrix(Algorytms.matrix, gv.VisitMatrix)
-                    Algorytms.ucs(Algorytms.matrix, gv.VisitMatrix)
-                Algorytms.findEnemyCoords(Algorytms.lenMatrix)
+                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                    Algorytms.ucs(Algorytms.matrix, Algorytms.visitMatrix)
+                Algorytms.findEnemyCoords(Algorytms.matrix)
+                for i in Algorytms.lenMatrix:
+                    print(*i)
                 print("Enemy array:")
                 print(Algorytms.enemyCoords)
                 for i in Algorytms.enemyCoords:
@@ -112,37 +104,53 @@ def main():
                     next = []
                     while minimum != 1:
                         Algorytms.ucsList.append(curr)
-                        if curr:
-                            if curr[0] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0] - 1][curr[1]] < minimum:
-                                minimum = Algorytms.lenMatrix[curr[0] - 1][curr[1]]
-                                next = [curr[0] - 1, curr[1]]
-                            if curr[1] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] - 1] < minimum:
-                                minimum = Algorytms.lenMatrix[curr[0]][curr[1] - 1]
-                                next = [curr[0], curr[1] - 1]
-                            if curr[0] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0] + 1][curr[1]] < minimum:
-                                minimum = Algorytms.lenMatrix[curr[0] + 1][curr[1]]
-                                next = [curr[0] + 1, curr[1]]
-                            if curr[1] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] + 1] < minimum:
-                                minimum = Algorytms.lenMatrix[curr[0]][curr[1] + 1]
-                                next = [curr[0], curr[1] + 1]
+                        if curr[0] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0] - 1][curr[1]] < minimum:
+                            minimum = Algorytms.lenMatrix[curr[0] - 1][curr[1]]
+                            next = [curr[0] - 1, curr[1]]
+                        if curr[1] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] - 1] < minimum:
+                            minimum = Algorytms.lenMatrix[curr[0]][curr[1] - 1]
+                            next = [curr[0], curr[1] - 1]
+                        if curr[0] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0] + 1][curr[1]] < minimum:
+                            minimum = Algorytms.lenMatrix[curr[0] + 1][curr[1]]
+                            next = [curr[0] + 1, curr[1]]
+                        if curr[1] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] + 1] < minimum:
+                            minimum = Algorytms.lenMatrix[curr[0]][curr[1] + 1]
+                            next = [curr[0], curr[1] + 1]
                         curr = next
 
                     Algorytms.arrUcsList.append(Algorytms.ucsList)
-                    ucsList = []
+                    Algorytms.ucsList = []
                 # print(arrUcsList)
                 print("Distance matrix")
-                for i in Algorytms.lenMatrix:
-                    print(*i)
+
 
                 print("path to enemies:")
                 for i in Algorytms.arrUcsList:
                     print(*i)
+            #
+            # for i in Algorytms.arrOfPath:
+            #     pix = gv.sc.Pixel(i[0]*50, i[1]*50)
+            #     gv.pixelPath.append(pix)
+            # for pixel in gv.pixelPath:
+            #     pixel.draw()
+            # for i in Algorytms.arrOfPath:
+            #     pix = gv.sc.Pixel(i[0] * 50, i[1] * 50)
+            #     gv.pixelPath.append(pix)
+            # for pixel in gv.pixelPath:
+            #     pixel.draw()
+
+                # if len(Algorytms) > 0:
+                #     for i in Algorytms.pixelPath:
+                #         gv.pixelPath.remove(i)
+
+
+
 
         for enemy in gv.ENEMIES[:]:
             enemy.move(gv.ENEMY_VEL)
             enemy.move_lasers(gv.LASER_VEL, gv.GOOD_SHIP)
 
-            if gv.RANDOM_LIB.randrange(0, 20) == 1:  # рандомізація пострілу ворога
+            if gv.RANDOM_LIB.randrange(0, 20) == 1:   # рандомізація пострілу ворога
                 enemy.shoot()
 
             if gv.LaserCreator.collide(enemy, gv.GOOD_SHIP):  # дотик до ворога
@@ -173,10 +181,10 @@ if __name__ == '__main__':
     run = True
     main_menu = True
     while run:
-        gv.WINDOW.blit(gv.BACKGROUND_PNG, (0, 0))  # створення графіки для гри
+        gv.WINDOW.blit(gv.BACKGROUND_PNG, (0, 0))   #створення графіки для гри
         title_label = title_font.render("Press any button to begin...", 1, (255, 255, 255))
 
-        gv.WINDOW.blit(title_label, (gv.WIDTH / 2 - title_label.get_width() / 2, 350))
+        gv.WINDOW.blit(title_label, (gv.WIDTH / 2 - title_label.get_width() / 2,350))
         if main_menu:
             main_menu = False
 

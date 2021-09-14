@@ -14,6 +14,8 @@ def updateFrame(): # оновлення фрейму
         enemy.draw(gv.WINDOW)
     for asteroid in gv.ASTEROIDS:
         asteroid.draw()
+    for pixel in gv.pixelPath:
+        pixel.draw()
     if gv.RANDOM_LIB.randrange(0, 2000) == 1:
         gv.ShipCreator.create_asteroids()
 
@@ -32,16 +34,7 @@ def updateFrame(): # оновлення фрейму
     #             if k[i][j] == 1 or k[i][j] == 4:
     #                 gv.WINDOW.set_at((i,j), (255,0,0))
 
-    gv.dfsArrayOfPath = []
-    gv.bfsArrayOfPath = []
-    gv.path = []
-    # dfs
-    gv.enemyCount = 0
 
-    for i in Algorytms.matrix:
-        for j in i:
-            if j == 2:
-                gv.enemyCount += 1
     # print(gv.enemyCount)
 
 

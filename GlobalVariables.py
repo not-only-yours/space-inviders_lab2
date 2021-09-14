@@ -7,6 +7,7 @@ import FrameCreator
 import ShipCreator as sc
 import LaserCreator
 
+
 # created global variables of libraries
 OS_LIB = os
 PG_LIB = pygame
@@ -60,8 +61,8 @@ GOOD_BULLET_PNG = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets"
 
 # Created global variables of background images
 BACKGROUND_PNG = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "background.png")), (WIDTH, HEIGHT))
-PIXELPOINT = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "1x1.png")), (50, 50))
-
+PIXELPOINT = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "1x1.png")), (10, 10))
+WAY = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "unknown.png")), (10, 10))
 ASTEROID = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets",
                                                                  "66-667836_meteor-clipart-pixel-art-asteroid-png.jpg")),
                                   (BAD_SHIP_SIZEX, BAD_SHIP_SIZEX))
@@ -83,5 +84,5 @@ path = []
 VisitMatrix = numpy.full((int(WIDTH / 50), int(HEIGHT / 50)), 0)
 findedPoints = []
 enemyCount = 0
-currAlg = "ucs"
-used = False
+currAlg = "dfs"
+pixelPath = []

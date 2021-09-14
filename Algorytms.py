@@ -8,17 +8,17 @@ import numpy
 
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 visitMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 path = [[14, 6]]
 numofEnemy = 1 # TODO: get num from matrix
 arrOfPath = []
 listOfVisited = [[14, 6]]
 arrOfList = []
 arrBeforePath = []
+ucsListOfVisited = [[14, 6]]
+lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 ucsList = []
 arrUcsList = []
 enemyCoords = []
-ucsListOfVisited = [[14, 6]]
 
 
 def createStartMatrix():
@@ -57,6 +57,7 @@ def createVisitMatrix(matrix, visitMatrix):
                 visitMatrix[i][j] = 1
             else:
                 visitMatrix[i][j] = 0
+
 
 def dfs(matrix, visitMatrix, curX=path[-1][0], curY=path[-1][1]):
     # print(path)
@@ -147,8 +148,6 @@ def bfs(matrix, visitMatrix, curX=listOfVisited[-1][0], curY=listOfVisited[-1][1
 
 
 
-
-
 def ucs(matrix, visitMatrix, curX=ucsListOfVisited[-1][0], curY=ucsListOfVisited[-1][1]):
     ucsListOfVisited.append([curX, curY])
     while len(ucsListOfVisited) > 0:
@@ -211,6 +210,6 @@ def ucs(matrix, visitMatrix, curX=ucsListOfVisited[-1][0], curY=ucsListOfVisited
 def findEnemyCoords(matrix):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
-            if matrix[i][j] == 0:
+            if matrix[i][j] == 2:
                 enemyCoords.append([i, j])
 

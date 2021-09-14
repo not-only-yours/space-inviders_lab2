@@ -112,4 +112,11 @@ def create_asteroids():
         gv.ASTEROIDS.append(asteroids)
 
     
+class Pixel:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.pixel_img = gv.WAY
 
+    def draw(self):  # створення човна
+        gv.WINDOW.blit(self.pixel_img, (self.x, self.y))

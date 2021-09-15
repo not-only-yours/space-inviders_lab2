@@ -19,7 +19,7 @@ LaserCreator = LaserCreator
 
 # Created global variables of Integer values
 LOST = False
-FPS = 60
+FPS = 15
 LEVEL = 1
 LIVES = 5
 SCORE = 0
@@ -62,7 +62,7 @@ GOOD_BULLET_PNG = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets"
 # Created global variables of background images
 BACKGROUND_PNG = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "background.png")), (WIDTH, HEIGHT))
 PIXELPOINT = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "1x1.png")), (10, 10))
-WAY = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "unknown.png")), (10, 10))
+WAY = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets", "unknown.png")), (15, 15))
 ASTEROID = PG_LIB.transform.scale(PG_LIB.image.load(os.path.join("assets",
                                                                  "66-667836_meteor-clipart-pixel-art-asteroid-png.jpg")),
                                   (BAD_SHIP_SIZEX, BAD_SHIP_SIZEX))
@@ -86,3 +86,4 @@ findedPoints = []
 enemyCount = 0
 currAlg = "ucs"
 pixelPath = []
+work = True

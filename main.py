@@ -1,5 +1,6 @@
 import GlobalVariables as gv
 import Algorytms
+import time
 
 def main():
     gv.CAN_EDIT = True
@@ -44,13 +45,9 @@ def main():
             gv.GOOD_SHIP.y += gv.PLAYER_VEL
         if keys[gv.PG_LIB.K_SPACE]:
             gv.GOOD_SHIP.shoot()
-        # if keys[gv.PG_LIB.K_x]:
-        #     for i in Algorytms.arrOfList:
-        #         pix = gv.sc.Pixel(i[0] * 50, i[1] * 50)
-        #         gv.pixelPath.append(pix)
-        #         for pixel in gv.pixelPath:
-        #             pixel.draw()
+
         if keys[gv.PG_LIB.K_z]:
+            gv.work = True
             if gv.currAlg == "dfs":
                 print("current alg bfs")
                 gv.currAlg = "bfs"
@@ -60,97 +57,129 @@ def main():
             elif gv.currAlg == "ucs":
                 print("current alg dfs")
                 gv.currAlg = "dfs"
+            # if len(Algorytms.path) > 0:
+            #     for i in Algorytms.path:
+            #         Algorytms.path.remove(i)
+            # if len(Algorytms.listOfVisited) > 0:
+            #     for i in Algorytms.listOfVisited:
+            #         Algorytms.listOfVisited.remove(i)
+            # if len(Algorytms.ucsListOfVisited) > 0:
+            #     for i in Algorytms.ucsListOfVisited:
+            #         Algorytms.ucsListOfVisited.remove(i)
+
 
         if keys[gv.PG_LIB.K_x]:
-            Algorytms.createStartMatrix()
-            print(Algorytms.matrix)
-            if gv.currAlg == "dfs":
-                while Algorytms.numofEnemy > 0:
-                    if len(Algorytms.path) > 1:
-                        Algorytms.matrix[Algorytms.path[-1][0]][Algorytms.path[-1][1]] = 3
-                        Algorytms.arrOfPath.append(Algorytms.path)
-                        Algorytms.path = [Algorytms.arrOfPath[0][0]]
-                        Algorytms.numofEnemy -= 1
-                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
-                    Algorytms.dfs(Algorytms.matrix, Algorytms.visitMatrix)
-                for i in Algorytms.arrOfPath:
-                    print(*i)
+            if gv.work == True:
+                Algorytms.createStartMatrix()
+                print(Algorytms.matrix)
+                if gv.currAlg == "dfs":
+                    gv.work = False
+                    start_time = time.time()
 
-            if gv.currAlg == "bfs":
-                while Algorytms.numofEnemy > 0:
-                    # print(path)
-                    if len(Algorytms.listOfVisited) > 1:
-                        Algorytms.matrix[Algorytms.listOfVisited[-1][0]][Algorytms.listOfVisited[-1][1]] = 3
-                        # print(arrBeforePath)
-                        Algorytms.arrOfList.append(Algorytms.arrBeforePath)
-                        Algorytms.arrOfList.append(Algorytms.listOfVisited)
-                        listOfVisited = [Algorytms.arrOfList[0][0]]
-                        Algorytms.numofEnemy -= 1
-                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
-                    Algorytms.bfs(Algorytms.matrix, Algorytms.visitMatrix)
-                for i in Algorytms.arrOfList:
-                    print(*i)
-            if gv.currAlg == "ucs":
-                while Algorytms.numofEnemy > 0:
-                    # print(path)
-                    if len(Algorytms.ucsListOfVisited) > 1:
-                        Algorytms.matrix[Algorytms.ucsListOfVisited[-1][0]][Algorytms.ucsListOfVisited[-1][1]] = 3
-                        # print(arrBeforePath)
-                        Algorytms.arrOfList.append(Algorytms.arrBeforePath)
-                        Algorytms.arrOfList.append(Algorytms.ucsListOfVisited)
-                        Algorytms.ucsListOfVisited = [Algorytms.arrOfList[0][0]]
-                        Algorytms.numofEnemy -= 1
-                        Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
-                    Algorytms.ucs(Algorytms.matrix, Algorytms.visitMatrix)
-                Algorytms.findEnemyCoords(Algorytms.matrix)
-                for i in Algorytms.lenMatrix:
-                    print(*i)
-                print("Enemy array:")
-                print(Algorytms.enemyCoords)
-                for i in Algorytms.enemyCoords:
-                    curr = i
-                    minimum = 10000
-                    next = []
-                    while minimum != 1:
-                        Algorytms.ucsList.append(curr)
-                        if curr[0] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0] - 1][curr[1]] < minimum:
-                            minimum = Algorytms.lenMatrix[curr[0] - 1][curr[1]]
-                            next = [curr[0] - 1, curr[1]]
-                        if curr[1] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] - 1] < minimum:
-                            minimum = Algorytms.lenMatrix[curr[0]][curr[1] - 1]
-                            next = [curr[0], curr[1] - 1]
-                        if curr[0] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0] + 1][curr[1]] < minimum:
-                            minimum = Algorytms.lenMatrix[curr[0] + 1][curr[1]]
-                            next = [curr[0] + 1, curr[1]]
-                        if curr[1] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] + 1] < minimum:
-                            minimum = Algorytms.lenMatrix[curr[0]][curr[1] + 1]
-                            next = [curr[0], curr[1] + 1]
-                        curr = next
+                    while Algorytms.numofEnemy > 0:
+                        if len(Algorytms.path) > 1:
+                            Algorytms.matrix[Algorytms.path[-1][0]][Algorytms.path[-1][1]] = 3
+                            Algorytms.arrOfPath.append(Algorytms.path)
+                            Algorytms.path = [Algorytms.arrOfPath[0][0]]
+                            Algorytms.numofEnemy -= 1
+                            Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                        Algorytms.dfs(Algorytms.matrix, Algorytms.visitMatrix)
+                    for i in Algorytms.arrOfPath:
+                        print(*i)
+                    print("--- %s seconds ---" % (time.time() - start_time))
 
-                    Algorytms.arrUcsList.append(Algorytms.ucsList)
-                    Algorytms.ucsList = []
-                # print(arrUcsList)
-                print("Distance matrix")
+                if gv.currAlg == "bfs":
+                    start_time = time.time()
+                    gv.work = False
+                    while Algorytms.numofEnemy > 0:
+                        # print(path)
+                        if len(Algorytms.listOfVisited) > 1:
+                            Algorytms.matrix[Algorytms.listOfVisited[-1][0]][Algorytms.listOfVisited[-1][1]] = 3
+                            # print(arrBeforePath)
+                            Algorytms.arrOfList.append(Algorytms.arrBeforePath)
+                            Algorytms.arrOfList.append(Algorytms.listOfVisited)
+                            listOfVisited = [Algorytms.arrOfList[0][0]]
+                            Algorytms.numofEnemy -= 1
+                            Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                        Algorytms.bfs(Algorytms.matrix, Algorytms.visitMatrix)
+
+                    for i in Algorytms.arrOfList:
+                        print(*i)
+                    print("--- %s seconds ---" % (time.time() - start_time))
+
+                if gv.currAlg == "ucs":
+                    start_time = time.time()
+                    gv.work = False
+                    while Algorytms.numofEnemy > 0:
+                        # print(path)
+                        if len(Algorytms.ucsListOfVisited) > 1:
+                            Algorytms.matrix[Algorytms.ucsListOfVisited[-1][0]][Algorytms.ucsListOfVisited[-1][1]] = 3
+                            # print(arrBeforePath)
+                            Algorytms.arrOfList.append(Algorytms.arrBeforePath)
+                            Algorytms.arrOfList.append(Algorytms.ucsListOfVisited)
+                            Algorytms.ucsListOfVisited = [Algorytms.arrOfList[0][0]]
+                            Algorytms.numofEnemy -= 1
+                            Algorytms.createVisitMatrix(Algorytms.matrix, Algorytms.visitMatrix)
+                        Algorytms.ucs(Algorytms.matrix, Algorytms.visitMatrix)
+                    Algorytms.findEnemyCoords(Algorytms.matrix)
+
+                    for i in Algorytms.lenMatrix:
+                        print(*i)
+                    print("Enemy array:")
+                    print(Algorytms.enemyCoords)
+                    for i in Algorytms.enemyCoords:
+                        curr = i
+                        minimum = 10000
+                        next = []
+                        while minimum != 1:
+                            Algorytms.ucsList.append(curr)
+                            if curr[0] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0] - 1][curr[1]] < minimum:
+                                minimum = Algorytms.lenMatrix[curr[0] - 1][curr[1]]
+                                next = [curr[0] - 1, curr[1]]
+                            if curr[1] - 1 >= 0 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] - 1] < minimum:
+                                minimum = Algorytms.lenMatrix[curr[0]][curr[1] - 1]
+                                next = [curr[0], curr[1] - 1]
+                            if curr[0] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0] + 1][curr[1]] < minimum:
+                                minimum = Algorytms.lenMatrix[curr[0] + 1][curr[1]]
+                                next = [curr[0] + 1, curr[1]]
+                            if curr[1] + 1 < 15 and 0 < Algorytms.lenMatrix[curr[0]][curr[1] + 1] < minimum:
+                                minimum = Algorytms.lenMatrix[curr[0]][curr[1] + 1]
+                                next = [curr[0], curr[1] + 1]
+                            curr = next
+
+                        Algorytms.arrUcsList.append(Algorytms.ucsList)
+                        Algorytms.ucsList = []
+                        print("--- %s seconds ---" % (time.time() - start_time))
+                    # print(arrUcsList)
+                    print("Distance matrix")
 
 
-                print("path to enemies:")
-                for i in Algorytms.arrUcsList:
-                    print(*i)
-            #
-            # for i in Algorytms.arrOfPath:
-            #     pix = gv.sc.Pixel(i[0]*50, i[1]*50)
-            #     gv.pixelPath.append(pix)
-            # for pixel in gv.pixelPath:
-            #     pixel.draw()
-            # for i in Algorytms.arrOfPath:
-            #     pix = gv.sc.Pixel(i[0] * 50, i[1] * 50)
-            #     gv.pixelPath.append(pix)
-            # for pixel in gv.pixelPath:
-            #     pixel.draw()
+                    print("path to enemies:")
+                    for i in Algorytms.arrUcsList:
+                        print(*i)
 
-                # if len(Algorytms) > 0:
-                #     for i in Algorytms.pixelPath:
-                #         gv.pixelPath.remove(i)
+                    if len(Algorytms.path) > 0:
+                        gv.pixelPath = []
+                        for i in Algorytms.path:
+                            pix = gv.ShipCreator.Pixel(int(i[0] * 50), int(i[1] * 50))
+                            gv.pixelPath.append(pix)
+
+                    if len(Algorytms.listOfVisited) > 0:
+                        gv.pixelPath = []
+                        for i in Algorytms.listOfVisited:
+                            pix = gv.ShipCreator.Pixel(int(i[0] * 50), int(i[1] * 50))
+                            gv.pixelPath.append(pix)
+
+                    if len(Algorytms.ucsListOfVisited) > 0:
+                        gv.pixelPath = []
+                        for i in Algorytms.ucsListOfVisited:
+                            pix = gv.ShipCreator.Pixel(int(i[0] * 50), int(i[1] * 50))
+                            gv.pixelPath.append(pix)
+
+
+                        # if len(Algorytms) > 0:
+                        #     for i in Algorytms.pixelPath:
+                        #         gv.pixelPath.remove(i)
 
 
 
@@ -178,6 +207,7 @@ def main():
             if gv.LaserCreator.collide(asteroid, gv.GOOD_SHIP):  # дотик до ворога
                 gv.GOOD_SHIP.health -= 5
                 gv.ASTEROIDS.remove(asteroid)
+
 
         gv.GOOD_SHIP.move_lasers(-gv.LASER_VEL, gv.ENEMIES)
         gv.GOOD_SHIP.move_lasers(-gv.LASER_VEL, gv.ASTEROIDS)

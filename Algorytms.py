@@ -8,10 +8,10 @@ import numpy
 
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 visitMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-path = [[14, 6]]
+path = [[7, 14]]
 numofEnemy = 1 # TODO: get num from matrix
 arrOfPath = []
-listOfVisited = [[14, 6]]
+listOfVisited = [[7, 14]]
 arrOfList = []
 arrBeforePath = []
 ucsListOfVisited = [[14, 6]]

@@ -2,6 +2,7 @@ import GlobalVariables as gv
 import Algorytms
 
 def updateFrame(): # оновлення фрейму
+
     gv.WINDOW.blit(gv.BACKGROUND_PNG, (0, 0))
 
     lives_label = gv.MAIN_FONT.render(f"Lives: {gv.LIVES}", 1, (255, 255, 255))
@@ -14,8 +15,6 @@ def updateFrame(): # оновлення фрейму
         enemy.draw(gv.WINDOW)
     for asteroid in gv.ASTEROIDS:
         asteroid.draw()
-    for pixel in gv.pixelPath:
-        pixel.draw()
     if gv.RANDOM_LIB.randrange(0, 2000) == 1:
         gv.ShipCreator.create_asteroids()
 
@@ -26,6 +25,32 @@ def updateFrame(): # оновлення фрейму
         score_label = gv.LOST_FONT.render(f"YOUR SCORE IS: {gv.SCORE}", 1, (255, 255, 255))
         gv.WINDOW.blit(lost_label, (gv.WIDTH / 2 - lost_label.get_width() / 2, 250))
         gv.WINDOW.blit(score_label, (gv.WIDTH / 2 - score_label.get_width() / 2, 350))
+
+    Algorytms.arrayOfPath = []
+    Algorytms.createVisitMatrix(Algorytms.matrix)
+    Algorytms.fillMatrix(Algorytms.matrix)
+    # for i in Algorytms.matrix:
+    #     print(*i)
+    while Algorytms.enemyArray:
+        Algorytms.emptyMatrix(Algorytms.lenMatrix, Algorytms.startPoint)
+        Algorytms.markThree(Algorytms.matrix)
+        # for i in lenMatrix:
+        #     print(*i)
+        Algorytms.path = []
+        Algorytms.astar(Algorytms.curr)
+        # print(path)
+        Algorytms.enemyArray.remove(Algorytms.enemyArray[0])
+        Algorytms.arrayOfPath.append(Algorytms.path)
+        for i in Algorytms.lenMatrix:
+            print(*i)
+    if gv.GOOD_SHIP and Algorytms.arrayOfPath:
+        if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][0][0]:
+            gv.GOOD_SHIP.y = Algorytms.arrayOfPath[0][0][0] * 50
+        if not gv.GOOD_SHIP.x == Algorytms.arrayOfPath[0][0][1]:
+            gv.GOOD_SHIP.x = Algorytms.arrayOfPath[0][0][1] * 50
+        Algorytms.arrayOfPath = []
+    # print(len(Algorytms.arrayOfPath))
+
 
     gv.PG_LIB.display.update()
     # for k in gv.dfsArrayOfPath:

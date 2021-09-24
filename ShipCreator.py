@@ -33,7 +33,10 @@ class Ship:
             laser = gv.LaserCreator.Laser(self.x + 20, self.y, self.laser_img)
             self.lasers.append(laser)
             self.cool_down_counter = 1
-
+    def shootRight(self):
+        laser = gv.LaserCreator.Laser(self.x + 20, self.y, self.laser_img)
+        self.lasers.append(laser)
+        self.cool_down_counter = 1
     def coldown(self): # механіка перезарядки
         if self.cool_down_counter >= self.COOLDOWN:
             self.cool_down_counter = 0

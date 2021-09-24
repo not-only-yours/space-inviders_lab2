@@ -7,209 +7,126 @@ import numpy
 # asteroids = 3
 
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-visitMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-path = [[7, 14]]
-numofEnemy = 1 # TODO: get num from matrix
-arrOfPath = []
-listOfVisited = [[7, 14]]
-arrOfList = []
-arrBeforePath = []
-ucsListOfVisited = [[14, 6]]
 lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-ucsList = []
-arrUcsList = []
-enemyCoords = []
 
+path = []
+numofEnemy = 9
+startPoint = [4, 2]
+curr = [4, 2]
+enemyArray = []
+arrayOfPath = []
 
-def createStartMatrix():
-    for i in gv.ASTEROIDS:
-        for j in range(int((i.x - 20) / 50), int((i.x + 20) / 50)):
-            for k in range(int((i.y - 20) / 50), int((i.y + 20) / 50)):
-                if 0 < j < len(matrix) and 0 < k < len(matrix):
-                    matrix[k][j] = 3
-                    gv.VisitMatrix[k][j] = 1
-    for i in gv.ENEMIES:
-        for j in range(int((i.x - 20) / 50), int((i.x + 20) / 50)):
-            for k in range(int((i.y - 20) / 50), int((i.y + 20) / 50)):
-                if 0 < j < len(matrix) and 0 < k < len(matrix):
-                    matrix[k][j] = 2
-                    gv.VisitMatrix[k][j] = 1
-
-    # global numofEnemy, path
-    # for i in matrix:
-    #     for j in i:
-    #         if j == 2:
-    #             numofEnemy += 1
-    #         if j == 1:
-    #             path = [[int(gv.GOOD_SHIP.x / 50), int(gv.GOOD_SHIP.y / 50)]]
-
-    matrix[0][0] = 0
-    matrix[int(gv.currPoint[1])][int(gv.currPoint[0])] = 1
-    gv.VisitMatrix[int(gv.currPoint[1])][int(gv.currPoint[0])] = 1
-
-
-
-
-def createVisitMatrix(matrix, visitMatrix):
-    for i in range(len(matrix)):
-        for j in range(len(matrix[i])):
-            if matrix[i][j] != 0:
-                visitMatrix[i][j] = 1
-            else:
-                visitMatrix[i][j] = 0
-
-
-def dfs(matrix, visitMatrix, curX=path[-1][0], curY=path[-1][1]):
-    # print(path)
-    # for i in visitMatrix:
-    #     print(*i)
-    visitMatrix[curX][curY] = 1
-    while len(path) > 0:
-        curX = path[-1][0]
-        curY = path[-1][1]
-        if curX + 1 < len(matrix) and matrix[curX + 1][curY] == 2:
-            path.append([curX + 1, curY])
-            break
-        elif curY + 1 < len(matrix) and matrix[curX][curY + 1] == 2:
-            path.append([curX, curY + 1])
-            break
-        elif curX - 1 >= 0 and matrix[curX - 1][curY] == 2:
-            path.append([curX - 1, curY])
-            break
-        elif curY - 1 >= 0 and matrix[curX][curY - 1] == 2:
-            path.append([curX, curY - 1])
-            break
-
-        step = False
-        # print(path)
-        # for i in visitMatrix:
-        #     print(*i)
-        if curX + 1 < len(matrix) and visitMatrix[curX + 1][curY] == 0 and not step:
-            visitMatrix[curX + 1][curY] = 1
-            path.append([curX + 1, curY])
-            step = True
-        elif curY + 1 < len(matrix) and visitMatrix[curX][curY + 1] == 0 and not step:
-            visitMatrix[curX][curY + 1] = 1
-            path.append([curX, curY + 1])
-            step = True
-        elif curY - 1 >= 0 and visitMatrix[curX][curY - 1] == 0 and not step:
-            visitMatrix[curX][curY - 1] = 1
-            path.append([curX, curY - 1])
-            step = True
-        elif curX - 1 >= 0 and visitMatrix[curX - 1][curY] == 0 and not step:
-            visitMatrix[curX - 1][curY] = 1
-            path.append([curX - 1, curY])
-            step = True
-        elif not step:
-            path.remove(path[-1])
-
-
-def bfs(matrix, visitMatrix, curX=listOfVisited[-1][0], curY=listOfVisited[-1][1]):
-    listOfVisited.append([curX, curY])
-    while len(listOfVisited) > 0:
-        #print(listOfVisited)
-        # for i in visitMatrix:
-        #     print(*i)
-        curX = listOfVisited[0][0]
-        curY = listOfVisited[0][1]
-        if curX + 1 < len(matrix) and matrix[curX + 1][curY] == 2:
-            listOfVisited.append([curX + 1, curY])
-            break
-        elif curY + 1 < len(matrix) and matrix[curX][curY + 1] == 2:
-            listOfVisited.append([curX, curY + 1])
-            break
-        elif curX - 1 >= 0 and matrix[curX - 1][curY] == 2:
-            listOfVisited.append([curX - 1, curY])
-            break
-        elif curY - 1 >= 0 and matrix[curX][curY - 1] == 2:
-            listOfVisited.append([curX, curY - 1])
-            break
-        step = False
-        # print(path)
-        # for i in visitMatrix:
-        #     print(*i)
-        if curX + 1 < len(matrix) and visitMatrix[curX + 1][curY] == 0:
-            visitMatrix[curX + 1][curY] = 1
-            listOfVisited.append([curX + 1, curY])
-
-        if curY + 1 < len(matrix) and visitMatrix[curX][curY + 1] == 0:
-            visitMatrix[curX][curY + 1] = 1
-            listOfVisited.append([curX, curY + 1])
-
-        if curY - 1 >= 0 and visitMatrix[curX][curY - 1] == 0:
-            visitMatrix[curX][curY - 1] = 1
-            listOfVisited.append([curX, curY - 1])
-
-        if curX - 1 >= 0 and visitMatrix[curX - 1][curY] == 0:
-            visitMatrix[curX - 1][curY] = 1
-            listOfVisited.append([curX - 1, curY])
-        arrBeforePath.append(path[-1])
-        listOfVisited.remove(listOfVisited[0])
-
-
-
-def ucs(matrix, visitMatrix, curX=ucsListOfVisited[-1][0], curY=ucsListOfVisited[-1][1]):
-    ucsListOfVisited.append([curX, curY])
-    while len(ucsListOfVisited) > 0:
-        # print(ucsListOfVisited)
-        # for i in visitMatrix:
-        #     print(*i)
-        curX = ucsListOfVisited[0][0]
-        curY = ucsListOfVisited[0][1]
-        if curX + 1 < len(matrix) and matrix[curX + 1][curY] == 2:
-            ucsListOfVisited.append([curX + 1, curY])
-            break
-        elif curY + 1 < len(matrix) and matrix[curX][curY + 1] == 2:
-            ucsListOfVisited.append([curX, curY + 1])
-            break
-        elif curX - 1 >= 0 and matrix[curX - 1][curY] == 2:
-            ucsListOfVisited.append([curX - 1, curY])
-            break
-        elif curY - 1 >= 0 and matrix[curX][curY - 1] == 2:
-            ucsListOfVisited.append([curX, curY - 1])
-            break
-        step = False
-        # print(path)
-        # for i in visitMatrix:
-        #     print(*i)
-        if curX + 1 < len(matrix) and visitMatrix[curX + 1][curY] == 0:
-            if lenMatrix[curX + 1][curY] == 0:
-                lenMatrix[curX + 1][curY] = lenMatrix[curX][curY] + 1
-            elif lenMatrix[curX + 1][curY] > lenMatrix[curX][curY] + 1:
-                lenMatrix[curX + 1][curY] = lenMatrix[curX][curY] + 1
-            visitMatrix[curX + 1][curY] = 1
-            ucsListOfVisited.append([curX + 1, curY])
-
-        if curY + 1 < len(matrix) and visitMatrix[curX][curY + 1] == 0:
-            if lenMatrix[curX][curY + 1] == 0:
-                lenMatrix[curX][curY + 1] = lenMatrix[curX][curY] + 1
-            elif lenMatrix[curX][curY + 1] > lenMatrix[curX][curY] + 1:
-                lenMatrix[curX][curY + 1] = lenMatrix[curX][curY] + 1
-            visitMatrix[curX][curY + 1] = 1
-            ucsListOfVisited.append([curX, curY + 1])
-
-        if curY - 1 >= 0 and visitMatrix[curX][curY - 1] == 0:
-            if lenMatrix[curX][curY - 1] == 0:
-                lenMatrix[curX][curY - 1] = lenMatrix[curX][curY] + 1
-            elif lenMatrix[curX][curY - 1] > lenMatrix[curX][curY] + 1:
-                lenMatrix[curX][curY - 1] = lenMatrix[curX][curY] + 1
-            visitMatrix[curX][curY - 1] = 1
-            ucsListOfVisited.append([curX, curY - 1])
-
-        if curX - 1 >= 0 and visitMatrix[curX - 1][curY] == 0:
-            if lenMatrix[curX - 1][curY] == 0:
-                lenMatrix[curX - 1][curY] = lenMatrix[curX][curY] + 1
-            elif lenMatrix[curX - 1][curY] > lenMatrix[curX][curY] + 1:
-                lenMatrix[curX - 1][curY] = lenMatrix[curX][curY] + 1
-            visitMatrix[curX - 1][curY] = 1
-            ucsListOfVisited.append([curX - 1, curY])
-        arrBeforePath.append(path[-1])
-        ucsListOfVisited.remove(ucsListOfVisited[0])
-
-
-def findEnemyCoords(matrix):
+def createVisitMatrix(matrix):
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             if matrix[i][j] == 2:
-                enemyCoords.append([i, j])
+                enemyArray.append([i, j])
 
+def emptyMatrix(matr, cur):
+    for i in range(0, len(matr) - 1):
+        for j in range(0, len(matr[i]) - 1):
+            if not matr[i][j] == 0:
+                matr[i][j] = 0
+    matr[cur[0]][cur[1]] = 1
+    # for i in matr:
+    #     print(*i)
+#TODO: add baricades(3)
+
+def lenToFromPointtoPoint(cur, startPoiint):
+    distance = 0
+    if cur[0] > startPoiint[0]:
+        distance += cur[0] - startPoiint[0]
+    else:
+        distance += startPoiint[0] - cur[0]
+    if cur[1] > startPoiint[1]:
+        distance += cur[1] - startPoiint[1]
+    else:
+        distance += startPoiint[1] - cur[1]
+    return distance
+
+
+def lenFinal(curr):
+    return lenToFromPointtoPoint(curr, startPoint) + lenToFromPointtoPoint(curr, enemyArray[0]) * 10
+
+
+# print(lenToFromPointtoPoint([12, 5], [1, 7]))
+# print(enemyArray)
+
+
+def isEnemyClose(cur):
+    if lenMatrix[cur[0] + 1][cur[1] + 1] == -1:
+        return True
+    elif lenMatrix[cur[0] - 1][cur[1] - 1] == -1:
+        return True
+    elif lenMatrix[cur[0] + 1][cur[1] - 1] == -1:
+        return True
+    elif lenMatrix[cur[0] - 1][cur[1] + 1] == -1:
+        return True
+    elif lenMatrix[cur[0]][cur[1] + 1] == -1:
+        return True
+    elif lenMatrix[cur[0] + 1][cur[1]] == -1:
+        return True
+    elif lenMatrix[cur[0]][cur[1] - 1] == -1:
+        return True
+    elif lenMatrix[cur[0] - 1][cur[1]] == -1:
+        return True
+    else:
+        return False
+
+
+def markPoints(cur):
+    if 0 < cur[0] + 1 < len(lenMatrix) and 0 < cur[1] + 1 < len(lenMatrix) and not lenMatrix[cur[0] + 1][cur[1] + 1] == 999:
+        lenMatrix[cur[0] + 1][cur[1] + 1] = lenFinal([cur[0] + 1, cur[1] + 1])
+    if 0 < cur[0] - 1 < len(lenMatrix) and 0 < cur[1] - 1 < len(lenMatrix) and not lenMatrix[cur[0] - 1][cur[1] - 1] == 999:
+        lenMatrix[cur[0] - 1][cur[1] - 1] = lenFinal([cur[0] - 1, cur[1] - 1])
+    if 0 < cur[0] + 1 < len(lenMatrix) and 0 < cur[1] - 1 < len(lenMatrix) and not lenMatrix[cur[0] + 1][cur[1] - 1] == 999:
+        lenMatrix[cur[0] + 1][cur[1] - 1] = lenFinal([cur[0] + 1, cur[1] - 1])
+    if 0 < cur[0] - 1 < len(lenMatrix) and 0 < cur[1] + 1 < len(lenMatrix) and not lenMatrix[cur[0] - 1][cur[1] + 1] == 999:
+        lenMatrix[cur[0] - 1][cur[1] + 1] = lenFinal([cur[0] - 1, cur[1] + 1])
+    if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] + 1 < len(lenMatrix) and not lenMatrix[cur[0]][cur[1] + 1] == 999:
+        lenMatrix[cur[0]][cur[1] + 1] = lenFinal([cur[0], cur[1] + 1])
+    if 0 < cur[0] + 1 < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0] + 1][cur[1]] == 999:
+        lenMatrix[cur[0] + 1][cur[1]] = lenFinal([cur[0] + 1, cur[1]])
+    if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] - 1 < len(lenMatrix) and not lenMatrix[cur[0]][cur[1] - 1] == 999:
+        lenMatrix[cur[0]][cur[1] - 1] = lenFinal([cur[0], cur[1] - 1])
+    if 0 < cur[0] - 1 < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0] - 1][cur[1]] == 999:
+        lenMatrix[cur[0] - 1][cur[1]] = lenFinal([cur[0] - 1, cur[1]])
+    if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0]][cur[1]] == 999:
+        lenMatrix[cur[0]][cur[1]] = lenFinal([cur[0], cur[1]])
+
+
+def getCoordsOfSmallest(matrix):
+    value = 9999
+    currentVay = []
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[i])):
+            if not matrix[i][j] == -1 and matrix[i][j] > 0:
+                if matrix[i][j] < value:
+                    value = matrix[i][j]
+                    currentVay = [i, j]
+    return currentVay
+
+
+def astar(curr):
+    lenMatrix[enemyArray[0][0]][enemyArray[0][1]] = -1
+    if not isEnemyClose(curr):
+        markPoints(curr)
+        path.append(curr)
+        curr = getCoordsOfSmallest(lenMatrix)
+        #print(curr)
+        astar(curr)
+
+def markThree(matr):
+    for i in range(0, len(matr)):
+        for j in range(0, len(matr[i])):
+            if matr[i][j] == 3:
+                lenMatrix[i][j] = 999
+
+
+def fillMatrix(matrix):
+    for i in gv.ENEMIES:
+        if 0 < int(i.y / 50) < 15 and 0 < int(i.x / 50) < 15:
+            matrix[int(i.y / 50)][int(i.x / 50)] = 2
+    for i in gv.ASTEROIDS:
+        if 0 < int(i.y / 50) < 15 and 0 < int(i.x / 50) < 15:
+            matrix[int(i.y / 50)][int(i.x / 50)] = 3

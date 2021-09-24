@@ -46,8 +46,10 @@ def updateFrame(): # оновлення фрейму
     if gv.GOOD_SHIP and Algorytms.arrayOfPath:
         if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][0][0]:
             gv.GOOD_SHIP.y = Algorytms.arrayOfPath[0][0][0] * 50
+            Algorytms.curr = [Algorytms.arrayOfPath[0][0][0], int(gv.GOOD_SHIP.x / 50)]
         if not gv.GOOD_SHIP.x == Algorytms.arrayOfPath[0][0][1]:
             gv.GOOD_SHIP.x = Algorytms.arrayOfPath[0][0][1] * 50
+            Algorytms.curr = [int(gv.GOOD_SHIP.y / 50), Algorytms.arrayOfPath[0][0][1]]
         Algorytms.arrayOfPath = []
     # print(len(Algorytms.arrayOfPath))
 

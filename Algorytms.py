@@ -8,11 +8,11 @@ import numpy
 
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-
+pointToResp = [350, 600]
 path = []
 numofEnemy = 9
-startPoint = [4, 2]
-curr = [4, 2]
+startPoint = [13, 7]
+curr = [13, 7]
 enemyArray = []
 arrayOfPath = []
 
@@ -23,6 +23,7 @@ def createVisitMatrix(matrix):
                 enemyArray.append([i, j])
 
 def emptyMatrix(matr, cur):
+    global curr
     for i in range(0, len(matr) - 1):
         for j in range(0, len(matr[i]) - 1):
             if not matr[i][j] == 0:
@@ -94,6 +95,14 @@ def markPoints(cur):
     if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0]][cur[1]] == 999:
         lenMatrix[cur[0]][cur[1]] = lenFinal([cur[0], cur[1]])
 
+def moveEnemy():
+    for i in gv.ENEMIES:
+        if i.x == gv.GOOD_SHIP.x and 700 > i.x > 50:
+            buf = gv.RANDOM_LIB.randrange(0, 1)
+            if buf == 0:
+                i.x += 50
+            else:
+                i.x -= 50
 
 def getCoordsOfSmallest(matrix):
     value = 9999

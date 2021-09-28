@@ -15,8 +15,8 @@ def updateFrame(): # оновлення фрейму
         enemy.draw(gv.WINDOW)
     for asteroid in gv.ASTEROIDS:
         asteroid.draw()
-    if gv.RANDOM_LIB.randrange(0, 2000) == 1:
-        gv.ShipCreator.create_asteroids()
+    # if gv.RANDOM_LIB.randrange(0, 2000) == 1:
+    #     gv.ShipCreator.create_asteroids()
 
     gv.GOOD_SHIP.draw(gv.WINDOW)
 
@@ -41,18 +41,31 @@ def updateFrame(): # оновлення фрейму
         # print(path)
         Algorytms.enemyArray.remove(Algorytms.enemyArray[0])
         Algorytms.arrayOfPath.append(Algorytms.path)
-        for i in Algorytms.lenMatrix:
-            print(*i)
+        # for i in Algorytms.lenMatrix:
+        #     print(*i)
     if gv.GOOD_SHIP and Algorytms.arrayOfPath:
-        if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][0][0]:
-            gv.GOOD_SHIP.y = Algorytms.arrayOfPath[0][0][0] * 50
-            Algorytms.curr = [Algorytms.arrayOfPath[0][0][0], int(gv.GOOD_SHIP.x / 50)]
-        if not gv.GOOD_SHIP.x == Algorytms.arrayOfPath[0][0][1]:
-            gv.GOOD_SHIP.x = Algorytms.arrayOfPath[0][0][1] * 50
-            Algorytms.curr = [int(gv.GOOD_SHIP.y / 50), Algorytms.arrayOfPath[0][0][1]]
+        if len(Algorytms.arrayOfPath[0]) > 1:
+            if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][1][0]:
+                gv.GOOD_SHIP.y = Algorytms.arrayOfPath[0][1][0] * 50
+                Algorytms.curr = [Algorytms.arrayOfPath[0][1][0], int(gv.GOOD_SHIP.x / 50)]
+            if not gv.GOOD_SHIP.x == Algorytms.arrayOfPath[0][1][1]:
+                gv.GOOD_SHIP.x = Algorytms.arrayOfPath[0][1][1] * 50
+                Algorytms.curr = [int(gv.GOOD_SHIP.y / 50), Algorytms.arrayOfPath[0][1][1]]
+                Algorytms.startPoint = [int(gv.GOOD_SHIP.y / 50), Algorytms.arrayOfPath[0][1][1]]
         Algorytms.arrayOfPath = []
+        for i in gv.ENEMIES:
+            if Algorytms.lenToFromPointtoPoint([int(gv.GOOD_SHIP.y / 50), int(gv.GOOD_SHIP.x/ 50)], [int(i.y / 50), int(i.x/ 50)]) < 3:
+                gv.ENEMIES.remove(i)
+                gv.GOOD_SHIP.x = Algorytms.pointToResp[1]
+                gv.GOOD_SHIP.y = Algorytms.pointToResp[0]
+                Algorytms.arrayOfPath = []
+                Algorytms.createVisitMatrix(Algorytms.matrix)
+                Algorytms.fillMatrix(Algorytms.matrix)
+        if gv.RANDOM_LIB.randrange(1, 200) == 1:
+            gv.currPoint = [int(Algorytms.pointToResp[1] / 50), int(Algorytms.pointToResp[0] / 50)]
+            Algorytms.startPoint = [int(Algorytms.pointToResp[1] / 50), int(Algorytms.pointToResp[0] / 50)]
     # print(len(Algorytms.arrayOfPath))
-
+    Algorytms.moveEnemy()
 
     gv.PG_LIB.display.update()
     # for k in gv.dfsArrayOfPath:

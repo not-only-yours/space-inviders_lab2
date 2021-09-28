@@ -33,10 +33,9 @@ class Ship:
             laser = gv.LaserCreator.Laser(self.x + 20, self.y, self.laser_img)
             self.lasers.append(laser)
             self.cool_down_counter = 1
-    def shootRight(self):
-        laser = gv.LaserCreator.Laser(self.x + 20, self.y, self.laser_img)
-        self.lasers.append(laser)
-        self.cool_down_counter = 1
+
+
+
     def coldown(self): # механіка перезарядки
         if self.cool_down_counter >= self.COOLDOWN:
             self.cool_down_counter = 0
@@ -110,7 +109,7 @@ class Asteroid:
 def create_asteroids():
     for i in range(150):  # створення масиву з ворогів
         asteroids = Asteroid(gv.RANDOM_LIB.randrange(0, 50) * 50,
-                             gv.RANDOM_LIB.randrange(0, 50) * 50 - 300,
+                             gv.RANDOM_LIB.randrange(1, 50) * 50 - 300,
                              )  # створення місця та колір ворога
         gv.ASTEROIDS.append(asteroids)
 

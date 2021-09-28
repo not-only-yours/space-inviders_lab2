@@ -8,7 +8,7 @@ import numpy
 
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-pointToResp = [350, 600]
+pointToResp = [600, 350]
 path = []
 numofEnemy = 9
 startPoint = [13, 7]

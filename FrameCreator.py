@@ -41,8 +41,8 @@ def updateFrame(): # оновлення фрейму
         # print(path)
         Algorytms.enemyArray.remove(Algorytms.enemyArray[0])
         Algorytms.arrayOfPath.append(Algorytms.path)
-        # for i in Algorytms.lenMatrix:
-        #     print(*i)
+        for i in Algorytms.lenMatrix:
+            print(*i)
     if gv.GOOD_SHIP and Algorytms.arrayOfPath:
         if len(Algorytms.arrayOfPath[0]) > 1:
             if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][1][0]:

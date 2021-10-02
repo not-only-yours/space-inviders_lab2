@@ -26,6 +26,7 @@ def updateFrame(): # оновлення фрейму
         gv.WINDOW.blit(lost_label, (gv.WIDTH / 2 - lost_label.get_width() / 2, 250))
         gv.WINDOW.blit(score_label, (gv.WIDTH / 2 - score_label.get_width() / 2, 350))
 
+    Algorytms.enemyArray = []
     Algorytms.arrayOfPath = []
     Algorytms.createVisitMatrix(Algorytms.matrix)
     Algorytms.fillMatrix(Algorytms.matrix)
@@ -34,20 +35,23 @@ def updateFrame(): # оновлення фрейму
     while Algorytms.enemyArray:
         Algorytms.emptyMatrix(Algorytms.lenMatrix, Algorytms.startPoint)
         Algorytms.markThree(Algorytms.matrix)
-        # for i in lenMatrix:
-        #     print(*i)
+        for i in Algorytms.matrix:
+            print(*i)
         Algorytms.path = []
         Algorytms.astar(Algorytms.curr)
-        # print(path)
+
         Algorytms.enemyArray.remove(Algorytms.enemyArray[0])
         Algorytms.arrayOfPath.append(Algorytms.path)
-        for i in Algorytms.lenMatrix:
-            print(*i)
+        print(Algorytms.enemyArray)
+        # for i in Algorytms.lenMatrix:
+        #     print(*i)
+    Algorytms.enemyArray = []
+    Algorytms.matrix = Algorytms.numpy.full((int(750 / 50), int(750 / 50)), 0)
     if gv.GOOD_SHIP and Algorytms.arrayOfPath:
         if len(Algorytms.arrayOfPath[0]) > 1:
-            if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][1][0]:
-                gv.GOOD_SHIP.y = Algorytms.arrayOfPath[0][1][0] * 50
-                Algorytms.curr = [Algorytms.arrayOfPath[0][1][0], int(gv.GOOD_SHIP.x / 50)]
+            # if not gv.GOOD_SHIP.y == Algorytms.arrayOfPath[0][1][0]:
+            #     gv.GOOD_SHIP.y = Algorytms.arrayOfPath[0][1][0] * 50
+            #     Algorytms.curr = [Algorytms.arrayOfPath[0][1][0], int(gv.GOOD_SHIP.x / 50)]
             if not gv.GOOD_SHIP.x == Algorytms.arrayOfPath[0][1][1]:
                 gv.GOOD_SHIP.x = Algorytms.arrayOfPath[0][1][1] * 50
                 Algorytms.curr = [int(gv.GOOD_SHIP.y / 50), Algorytms.arrayOfPath[0][1][1]]
@@ -56,8 +60,13 @@ def updateFrame(): # оновлення фрейму
         for i in gv.ENEMIES:
             if Algorytms.lenToFromPointtoPoint([int(gv.GOOD_SHIP.y / 50), int(gv.GOOD_SHIP.x/ 50)], [int(i.y / 50), int(i.x/ 50)]) < 3:
                 gv.ENEMIES.remove(i)
-                gv.GOOD_SHIP.x = Algorytms.pointToResp[1]
-                gv.GOOD_SHIP.y = Algorytms.pointToResp[0]
+                if [int(i.y / 50), int(i.x/ 50)] in Algorytms.enemyArray:
+                    Algorytms.enemyArray.remove([int(i.y / 50), int(i.x/ 50)])
+                if [int(i.x / 50), int(i.y/ 50)] in Algorytms.enemyArray:
+                    Algorytms.enemyArray.remove([int(i.x / 50), int(i.y/ 50)])
+                # gv.GOOD_SHIP.x = Algorytms.pointToResp[1]
+                # gv.GOOD_SHIP.y = Algorytms.pointToResp[0]
+                Algorytms.enemyArray = []
                 Algorytms.arrayOfPath = []
                 Algorytms.createVisitMatrix(Algorytms.matrix)
                 Algorytms.fillMatrix(Algorytms.matrix)

@@ -55,21 +55,21 @@ def lenFinal(curr):
 
 
 def isEnemyClose(cur):
-    if lenMatrix[cur[0] + 1][cur[1] + 1] == -1:
+    if 0 <= cur[0] + 1 < 15 and 0 <= cur[1] + 1 < 15 and lenMatrix[cur[0] + 1][cur[1] + 1] == -1:
         return True
-    elif lenMatrix[cur[0] - 1][cur[1] - 1] == -1:
+    elif 0 <= cur[0] - 1 < 15 and 0 <= cur[1] - 1 < 15 and lenMatrix[cur[0] - 1][cur[1] - 1] == -1:
         return True
-    elif lenMatrix[cur[0] + 1][cur[1] - 1] == -1:
+    elif 0 <= cur[0] + 1 < 15 and 0 <= cur[1] - 1 < 15 and lenMatrix[cur[0] + 1][cur[1] - 1] == -1:
         return True
-    elif lenMatrix[cur[0] - 1][cur[1] + 1] == -1:
+    elif 0 <= cur[0] - 1 < 15 and 0 <= cur[1] + 1 < 15 and lenMatrix[cur[0] - 1][cur[1] + 1] == -1:
         return True
-    elif lenMatrix[cur[0]][cur[1] + 1] == -1:
+    elif 0 <= cur[0] < 15 and 0 <= cur[1] + 1 < 15 and lenMatrix[cur[0]][cur[1] + 1] == -1:
         return True
-    elif lenMatrix[cur[0] + 1][cur[1]] == -1:
+    elif 0 <= cur[0] + 1 < 15 and 0 <= cur[1] < 15 and lenMatrix[cur[0] + 1][cur[1]] == -1:
         return True
-    elif lenMatrix[cur[0]][cur[1] - 1] == -1:
+    elif 0 <= cur[0] < 15 and 0 <= cur[1] - 1 < 15 and lenMatrix[cur[0]][cur[1] - 1] == -1:
         return True
-    elif lenMatrix[cur[0] - 1][cur[1]] == -1:
+    elif 0 <= cur[0] - 1 < 15 and 0 <= cur[1] < 15 and lenMatrix[cur[0] - 1][cur[1]] == -1:
         return True
     else:
         return False
@@ -96,13 +96,22 @@ def markPoints(cur):
         lenMatrix[cur[0]][cur[1]] = lenFinal([cur[0], cur[1]])
 
 def moveEnemy():
+    global arrayOfPath
     for i in gv.ENEMIES:
-        if i.x == gv.GOOD_SHIP.x and 700 > i.x > 50:
-            buf = gv.RANDOM_LIB.randrange(0, 1)
+        if i.x == gv.GOOD_SHIP.x and 600 > i.x > 50:
+            if [int(i.y / 50), int(i.x / 50)] in enemyArray:
+                enemyArray.remove([int(i.y / 50), int(i.x / 50)])
+            if [int(i.x / 50), int(i.y / 50)] in enemyArray:
+                enemyArray.remove([int(i.x / 50), int(i.y / 50)])
+            buf = gv.RANDOM_LIB.choice([1, 0])
             if buf == 0:
                 i.x += 50
             else:
                 i.x -= 50
+
+    arrayOfPath = []
+    createVisitMatrix(matrix)
+    fillMatrix(matrix)
 
 def getCoordsOfSmallest(matrix):
     value = 9999

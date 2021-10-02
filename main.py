@@ -26,7 +26,7 @@ def main():
             gv.LEVEL += 1
             gv.WAVE_LENGTH += 5
             for i in range(gv.WAVE_LENGTH):         # створення масиву з ворогів
-                enemy = gv.ShipCreator.Enemy(gv.RANDOM_LIB.randrange(1, 4) * 150,
+                enemy = gv.ShipCreator.Enemy(gv.RANDOM_LIB.randrange(1, 12) * 50,
                                              gv.RANDOM_LIB.randrange(-1500, -100),
                                              gv.RANDOM_LIB.choice(["red", "blue", "purple"])) # створення місця та колір ворога
                 gv.ENEMIES.append(enemy)

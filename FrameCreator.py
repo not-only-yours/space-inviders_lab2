@@ -17,7 +17,8 @@ def updateFrame(): # оновлення фрейму
         asteroid.draw()
     # if gv.RANDOM_LIB.randrange(0, 2000) == 1:
     #     gv.ShipCreator.create_asteroids()
-
+    for pixel in gv.pixelPath:
+        pixel.draw()
     gv.GOOD_SHIP.draw(gv.WINDOW)
 
     if gv.LOST:  # програш
@@ -28,6 +29,7 @@ def updateFrame(): # оновлення фрейму
 
     Algorytms.enemyArray = []
     Algorytms.arrayOfPath = []
+    gv.pixelPath = []
     Algorytms.createVisitMatrix(Algorytms.matrix)
     Algorytms.fillMatrix(Algorytms.matrix)
     # for i in Algorytms.matrix:
@@ -42,6 +44,10 @@ def updateFrame(): # оновлення фрейму
 
         Algorytms.enemyArray.remove(Algorytms.enemyArray[0])
         Algorytms.arrayOfPath.append(Algorytms.path)
+        for j in Algorytms.arrayOfPath:
+            for i in j:
+                pixel = gv.ShipCreator.Pixel(int(i[1] * 50), int(i[0] * 50))
+                gv.pixelPath.append(pixel)
         print(Algorytms.enemyArray)
         # for i in Algorytms.lenMatrix:
         #     print(*i)

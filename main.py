@@ -30,6 +30,8 @@ def main():
                                              gv.RANDOM_LIB.randrange(-1500, -100),
                                              gv.RANDOM_LIB.choice(["red", "blue", "purple"])) # створення місця та колір ворога
                 gv.ENEMIES.append(enemy)
+
+
         for event in gv.PG_LIB.event.get():
             if event.type == gv.PG_LIB.QUIT:
                 run = False
@@ -67,11 +69,6 @@ def main():
                 gv.ENEMIES.remove(enemy)
                 gv.SCORE -= 20
 
-            if enemy.y + gv.BAD_SHIP_SIZEY + 10 > gv.HEIGHT:  # проходження ворогу до низу екрану
-                gv.LIVES -= 1
-                gv.ENEMIES.remove(enemy)
-                gv.SCORE -= 100
-
         for asteroid in gv.ASTEROIDS[:]:
             asteroid.move(0.8 * gv.ENEMY_VEL)
 
@@ -81,6 +78,7 @@ def main():
 
 
         gv.GOOD_SHIP.move_lasers(-gv.LASER_VEL, gv.ENEMIES)
+
         gv.GOOD_SHIP.move_lasers(-gv.LASER_VEL, gv.ASTEROIDS)
 
         gv.FrameCreator_LIB.updateFrame()
@@ -97,7 +95,7 @@ if __name__ == '__main__':
         gv.WINDOW.blit(title_label, (gv.WIDTH / 2 - title_label.get_width() / 2,350))
         if main_menu:
             main_menu = False
-
+            Algorytms.startGame = True
         gv.PG_LIB.display.update()
         for event in gv.PG_LIB.event.get():
             if event.type == gv.PG_LIB.QUIT:

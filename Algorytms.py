@@ -1,20 +1,141 @@
 import GlobalVariables as gv
 import numpy
 
-# empty = 0
-# current = 1
-# enemy = 2
-# asteroids = 3
-
 matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-lenMatrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
-pointToResp = [600, 350]
-path = []
-numofEnemy = 9
-startPoint = [13, 7]
-curr = [13, 7]
+visited = numpy.full((int(750 / 50), int(750 / 50)), 0)
 enemyArray = []
-arrayOfPath = []
+startGame = False
+
+
+def findEnemies():
+    buff = []
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[i])):
+            if matrix[i][j] == 2:
+                buff.append([i, j])
+    return buff
+
+
+enemies = findEnemies()
+
+
+class Node():
+    point = 0
+    nodes = []
+    coords = []
+    father = []
+
+    def __init__(self, point=0, coords=None, nodes=None):
+        self.point = point
+        if nodes is None:
+            self.nodes = []
+        else:
+            self.nodes = nodes
+        if coords is None:
+            self.coords = []
+        else:
+            self.coords = coords
+
+    def addNode(self, el):
+        self.nodes.append(el)
+
+    def setPoint(self, num):
+        self.point = num
+
+
+def emtyVisitMatrix():
+    for i in range(0, len(visited)):
+        for j in range(0, len(visited[i])):
+            visited[i][j] = 0
+
+
+def getStartCoords():
+    if startGame and gv.GOOD_SHIP:
+        return [int(gv.GOOD_SHIP.y / 50), int(gv.GOOD_SHIP.x / 50)]
+    else:
+        return [13, 7]
+
+
+def getNearNodes(coords=None):
+    ans = []
+    buff = []
+    if coords is None:
+        coords = getStartCoords()
+    buff.append(coords)
+    for i in buff:
+        if 0 <= i[0] + 1 < len(matrix) and 0 <= i[1] + 1 < len(matrix) and visited[i[0] + 1][i[1] + 1] != 1:
+            ans.append([i[0] + 1, i[1] + 1])
+        if 0 <= i[0] - 1 < len(matrix) and 0 <= i[1] - 1 < len(matrix) and visited[i[0] - 1][i[1] - 1] != 1:
+            ans.append([i[0] - 1, i[1] - 1])
+        if 0 <= i[0] + 1 < len(matrix) and 0 <= i[1] - 1 < len(matrix) and visited[i[0] + 1][i[1] - 1] != 1:
+            ans.append([i[0] + 1, i[1] - 1])
+        if 0 <= i[0] - 1 < len(matrix) and 0 <= i[1] + 1 < len(matrix) and visited[i[0] - 1][i[1] + 1] != 1:
+            ans.append([i[0] - 1, i[1] + 1])
+        if 0 <= i[0] < len(matrix) and 0 <= i[1] + 1 < len(matrix) and visited[i[0]][i[1] + 1] != 1:
+            ans.append([i[0], i[1] + 1])
+        if 0 <= i[0] + 1 < len(matrix) and 0 <= i[1] < len(matrix) and visited[i[0] + 1][i[1]] != 1:
+            ans.append([i[0] + 1, i[1]])
+        if 0 <= i[0] < len(matrix) and 0 <= i[1] - 1 < len(matrix) and visited[i[0]][i[1] - 1] != 1:
+            ans.append([i[0], i[1] - 1])
+        if 0 <= i[0] - 1 < len(matrix) and 0 <= i[1] < len(matrix) and visited[i[0] - 1][i[1]] != 1:
+            ans.append([i[0] - 1, i[1]])
+        if 0 <= i[0] < len(matrix) and 0 <= i[1] < len(matrix) and visited[i[0]][i[1]] != 1:
+            ans.append([i[0], i[1]])
+        for element in buff:
+            visited[element[0]][element[1]] = 1
+            if element in ans:
+                ans.remove(element)
+        buffer = []
+        for i in ans:
+            buffer.append(Node(matrix[i[0]][i[1]], [i[0], i[1]]))
+        return buffer
+
+
+class Tree:
+    startNode = Node(1, getStartCoords(), getNearNodes())
+    current = startNode
+    before = []
+
+    def createTree(self):
+        for i in self.current.nodes:
+            self.before = self.current
+            self.current.father = self.before
+            self.current = i
+            self.current.nodes = getNearNodes(self.current.coords)
+            if self.current.nodes:
+                self.createTree(self)
+
+    def isUnvisited(self):
+        if self.current.nodes:
+            for i in self.current.nodes:
+                if visited[i.coords[0]][i.coords[1]] == 1:
+                    return False
+        return True
+
+    def setPriceInTree(self):
+        checker = True
+        if self.current.nodes and self.isUnvisited(self):
+            for i in self.current.nodes:
+                if matrix[i.coords[0]][i.coords[1]] >= matrix[self.current.coords[0]][self.current.coords[1]] + \
+                        self.current.coords[0] * self.current.coords[1]:
+                    matrix[i.coords[0]][i.coords[1]] = 0
+                    checker = False
+                if not [i.coords[0], i.coords[1]] in enemies and checker:
+                    matrix[i.coords[0]][i.coords[1]] = matrix[self.current.coords[0]][self.current.coords[1]] + \
+                                                       self.current.coords[0] * self.current.coords[1]
+
+                if visited[i.coords[0]][i.coords[1]] != 1:
+                    self.before = self.current
+                    self.current = i
+                    visited[self.current.coords[0]][self.current.coords[1]] = 1
+                    self.setPriceInTree(self)
+        else:
+            self.current = self.before
+            checker = True
+            # print(self.current.point)
+
+            # print(self.current.point)
+
 
 def createVisitMatrix(matrix):
     for i in range(len(matrix)):
@@ -22,123 +143,15 @@ def createVisitMatrix(matrix):
             if matrix[i][j] == 2:
                 enemyArray.append([i, j])
 
+
 def emptyMatrix(matr, cur):
-    global curr
-    for i in range(0, len(matr) - 1):
-        for j in range(0, len(matr[i]) - 1):
+    for i in range(0, len(matr)):
+        for j in range(0, len(matr[i])):
             if not matr[i][j] == 0:
                 matr[i][j] = 0
     matr[cur[0]][cur[1]] = 1
     # for i in matr:
     #     print(*i)
-#TODO: add baricades(3)
-
-def lenToFromPointtoPoint(cur, startPoiint):
-    distance = 0
-    if cur[0] > startPoiint[0]:
-        distance += cur[0] - startPoiint[0]
-    else:
-        distance += startPoiint[0] - cur[0]
-    if cur[1] > startPoiint[1]:
-        distance += cur[1] - startPoiint[1]
-    else:
-        distance += startPoiint[1] - cur[1]
-    return distance
-
-
-def lenFinal(curr):
-    return lenToFromPointtoPoint(curr, startPoint) + lenToFromPointtoPoint(curr, enemyArray[0]) * 10
-
-
-# print(lenToFromPointtoPoint([12, 5], [1, 7]))
-# print(enemyArray)
-
-
-def isEnemyClose(cur):
-    if 0 <= cur[0] + 1 < 15 and 0 <= cur[1] + 1 < 15 and lenMatrix[cur[0] + 1][cur[1] + 1] == -1:
-        return True
-    elif 0 <= cur[0] - 1 < 15 and 0 <= cur[1] - 1 < 15 and lenMatrix[cur[0] - 1][cur[1] - 1] == -1:
-        return True
-    elif 0 <= cur[0] + 1 < 15 and 0 <= cur[1] - 1 < 15 and lenMatrix[cur[0] + 1][cur[1] - 1] == -1:
-        return True
-    elif 0 <= cur[0] - 1 < 15 and 0 <= cur[1] + 1 < 15 and lenMatrix[cur[0] - 1][cur[1] + 1] == -1:
-        return True
-    elif 0 <= cur[0] < 15 and 0 <= cur[1] + 1 < 15 and lenMatrix[cur[0]][cur[1] + 1] == -1:
-        return True
-    elif 0 <= cur[0] + 1 < 15 and 0 <= cur[1] < 15 and lenMatrix[cur[0] + 1][cur[1]] == -1:
-        return True
-    elif 0 <= cur[0] < 15 and 0 <= cur[1] - 1 < 15 and lenMatrix[cur[0]][cur[1] - 1] == -1:
-        return True
-    elif 0 <= cur[0] - 1 < 15 and 0 <= cur[1] < 15 and lenMatrix[cur[0] - 1][cur[1]] == -1:
-        return True
-    else:
-        return False
-
-
-def markPoints(cur):
-    if 0 < cur[0] + 1 < len(lenMatrix) and 0 < cur[1] + 1 < len(lenMatrix) and not lenMatrix[cur[0] + 1][cur[1] + 1] == 999:
-        lenMatrix[cur[0] + 1][cur[1] + 1] = lenFinal([cur[0] + 1, cur[1] + 1])
-    if 0 < cur[0] - 1 < len(lenMatrix) and 0 < cur[1] - 1 < len(lenMatrix) and not lenMatrix[cur[0] - 1][cur[1] - 1] == 999:
-        lenMatrix[cur[0] - 1][cur[1] - 1] = lenFinal([cur[0] - 1, cur[1] - 1])
-    if 0 < cur[0] + 1 < len(lenMatrix) and 0 < cur[1] - 1 < len(lenMatrix) and not lenMatrix[cur[0] + 1][cur[1] - 1] == 999:
-        lenMatrix[cur[0] + 1][cur[1] - 1] = lenFinal([cur[0] + 1, cur[1] - 1])
-    if 0 < cur[0] - 1 < len(lenMatrix) and 0 < cur[1] + 1 < len(lenMatrix) and not lenMatrix[cur[0] - 1][cur[1] + 1] == 999:
-        lenMatrix[cur[0] - 1][cur[1] + 1] = lenFinal([cur[0] - 1, cur[1] + 1])
-    if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] + 1 < len(lenMatrix) and not lenMatrix[cur[0]][cur[1] + 1] == 999:
-        lenMatrix[cur[0]][cur[1] + 1] = lenFinal([cur[0], cur[1] + 1])
-    if 0 < cur[0] + 1 < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0] + 1][cur[1]] == 999:
-        lenMatrix[cur[0] + 1][cur[1]] = lenFinal([cur[0] + 1, cur[1]])
-    if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] - 1 < len(lenMatrix) and not lenMatrix[cur[0]][cur[1] - 1] == 999:
-        lenMatrix[cur[0]][cur[1] - 1] = lenFinal([cur[0], cur[1] - 1])
-    if 0 < cur[0] - 1 < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0] - 1][cur[1]] == 999:
-        lenMatrix[cur[0] - 1][cur[1]] = lenFinal([cur[0] - 1, cur[1]])
-    if 0 < cur[0] < len(lenMatrix) and 0 < cur[1] < len(lenMatrix) and not lenMatrix[cur[0]][cur[1]] == 999:
-        lenMatrix[cur[0]][cur[1]] = lenFinal([cur[0], cur[1]])
-
-def moveEnemy():
-    global arrayOfPath
-    for i in gv.ENEMIES:
-        if i.x == gv.GOOD_SHIP.x and 600 > i.x > 50:
-            if [int(i.y / 50), int(i.x / 50)] in enemyArray:
-                enemyArray.remove([int(i.y / 50), int(i.x / 50)])
-            if [int(i.x / 50), int(i.y / 50)] in enemyArray:
-                enemyArray.remove([int(i.x / 50), int(i.y / 50)])
-            buf = gv.RANDOM_LIB.choice([1, 0])
-            if buf == 0:
-                i.x += 50
-            else:
-                i.x -= 50
-
-    arrayOfPath = []
-    createVisitMatrix(matrix)
-    fillMatrix(matrix)
-
-def getCoordsOfSmallest(matrix):
-    value = 9999
-    currentVay = []
-    for i in range(0, len(matrix)):
-        for j in range(0, len(matrix[i])):
-            if not matrix[i][j] == -1 and matrix[i][j] > 0:
-                if matrix[i][j] < value:
-                    value = matrix[i][j]
-                    currentVay = [i, j]
-    return currentVay
-
-
-def astar(curr):
-    lenMatrix[enemyArray[0][0]][enemyArray[0][1]] = -1
-    if not isEnemyClose(curr):
-        markPoints(curr)
-        path.append(curr)
-        curr = getCoordsOfSmallest(lenMatrix)
-        #print(curr)
-        astar(curr)
-
-def markThree(matr):
-    for i in range(0, len(matr)):
-        for j in range(0, len(matr[i])):
-            if matr[i][j] == 3:
-                lenMatrix[i][j] = 999
 
 
 def fillMatrix(matrix):
@@ -148,3 +161,25 @@ def fillMatrix(matrix):
     for i in gv.ASTEROIDS:
         if 0 < int(i.y / 50) < 15 and 0 < int(i.x / 50) < 15:
             matrix[int(i.y / 50)][int(i.x / 50)] = 3
+
+
+def moveEnemy():
+    global arrayOfPath
+    for i in gv.ENEMIES[1:]:
+        if gv.RANDOM_LIB.randint(1, 100) == 1 and 600 > i.x > 50:
+            buf = gv.RANDOM_LIB.choice([1, 0])
+            if buf == 0 and i.x + 50 < 600:
+                i.x += 50
+            elif i.x - 50 > 50:
+                i.x -= 50
+    if gv.ENEMIES:
+        gv.ENEMIES[0].x = gv.GOOD_SHIP.x
+        if gv.ENEMIES[0].x == gv.GOOD_SHIP.x and 600 > gv.ENEMIES[0].x > 50:
+            if [int(gv.ENEMIES[0].y / 50), int(gv.ENEMIES[0].x / 50)] in enemyArray:
+                enemyArray.remove([int(gv.ENEMIES[0].y / 50), int(gv.ENEMIES[0].x / 50)])
+            if [int(gv.ENEMIES[0].x / 50), int(gv.ENEMIES[0].y / 50)] in enemyArray:
+                enemyArray.remove([int(gv.ENEMIES[0].x / 50), int(gv.ENEMIES[0].y / 50)])
+
+    arrayOfPath = []
+    createVisitMatrix(matrix)
+    fillMatrix(matrix)

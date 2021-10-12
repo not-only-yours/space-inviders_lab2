@@ -60,17 +60,8 @@ class Player(Ship):
             else:
                 for obj in objs:
                     if laser.collision(obj):
-                        if [int(obj.y / 50), int(obj.x/ 50)] in Algorytms.enemyArray:
-                            Algorytms.enemyArray.remove([int(obj.y / 50), int(obj.x/ 50)])
-                        if [int(obj.y / 50), int(obj.x/ 50)] in Algorytms.enemyArray:
-                            Algorytms.enemyArray.remove([int(obj.y / 50), int(obj.x/ 50)])
                         objs.remove(obj)
                         gv.SCORE += 50
-                        Algorytms.enemyArray = []
-                        Algorytms.matrix = Algorytms.numpy.full((int(750 / 50), int(750 / 50)), 0)
-                        Algorytms.arrayOfPath = []
-                        Algorytms.createVisitMatrix(Algorytms.matrix)
-                        Algorytms.fillMatrix(Algorytms.matrix)
                         if laser in self.lasers:
                             self.lasers.remove(laser)
 

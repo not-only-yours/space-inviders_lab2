@@ -5,6 +5,7 @@ matrix = numpy.full((int(750 / 50), int(750 / 50)), 0)
 visited = numpy.full((int(750 / 50), int(750 / 50)), 0)
 enemyArray = []
 startGame = False
+max = True
 
 
 def findEnemies():
@@ -113,6 +114,7 @@ class Tree:
         return True
 
     def setPriceInTree(self):
+        global max
         checker = True
         if self.current.nodes and self.isUnvisited(self):
             for i in self.current.nodes:
@@ -121,15 +123,24 @@ class Tree:
                     matrix[i.coords[0]][i.coords[1]] = 0
                     checker = False
                 if not [i.coords[0], i.coords[1]] in enemies and checker:
-                    matrix[i.coords[0]][i.coords[1]] = matrix[self.current.coords[0]][self.current.coords[1]] + \
-                                                       self.current.coords[0] * self.current.coords[1]
-
+                    if max and matrix[i.coords[0]][i.coords[1]]!=2:
+                        matrix[i.coords[0]][i.coords[1]] += (matrix[self.current.coords[0]][self.current.coords[1]] + self.current.coords[0] * self.current.coords[1])
+                    elif  matrix[i.coords[0]][i.coords[1]]!=2:
+                        matrix[i.coords[0]][i.coords[1]] += (matrix[self.current.coords[0]][self.current.coords[1]] + self.current.coords[0] * self.current.coords[1])
                 if visited[i.coords[0]][i.coords[1]] != 1:
                     self.before = self.current
                     self.current = i
                     visited[self.current.coords[0]][self.current.coords[1]] = 1
+                    if max:
+                        max = False
+                    else:
+                        max = True
                     self.setPriceInTree(self)
         else:
+            if max:
+                max = False
+            else:
+                max = True
             self.current = self.before
             checker = True
             # print(self.current.point)

@@ -1,8 +1,11 @@
+import time
+
 import GlobalVariables as gv
 import Algorytms
 
-def updateFrame(): # оновлення фрейму
 
+def updateFrame():  # оновлення фрейму
+    Tre = None
     gv.WINDOW.blit(gv.BACKGROUND_PNG, (0, 0))
 
     lives_label = gv.MAIN_FONT.render(f"Lives: {gv.LIVES}", 1, (255, 255, 255))
@@ -14,7 +17,7 @@ def updateFrame(): # оновлення фрейму
     gv.WINDOW.blit(enemyType1, (10, 70))
     gv.WINDOW.blit(enemyType2, (10, 100))
     gv.WINDOW.blit(level_label, (gv.WIDTH - level_label.get_width() - 10, 10))
-    gv.WINDOW.blit(score_label,(10,40))
+    gv.WINDOW.blit(score_label, (10, 40))
     for enemy in gv.ENEMIES:
         enemy.draw(gv.WINDOW)
     for asteroid in gv.ASTEROIDS:
@@ -32,18 +35,17 @@ def updateFrame(): # оновлення фрейму
 
     Algorytms.createVisitMatrix(Algorytms.matrix)
     Algorytms.fillMatrix(Algorytms.matrix)
-    # for i in Algorytms.matrix:
-    #     print(*i)
+    for i in Algorytms.matrix:
+        print(*i)
 
-
-    while Algorytms.enemyArray:
-        Algorytms.emptyMatrix(Algorytms.visited, [int(gv.GOOD_SHIP.y / 50), int(gv.GOOD_SHIP.x/50)])
+    if Algorytms.enemyArray:
+        Algorytms.emptyMatrix(Algorytms.visited, [int(gv.GOOD_SHIP.y / 50), int(gv.GOOD_SHIP.x / 50)])
         Algorytms.emptyMatrix(Algorytms.matrix, [int(gv.GOOD_SHIP.y / 50), int(gv.GOOD_SHIP.x / 50)])
         # print("aaaaaaa")
         # for i in Algorytms.matrix:
         #     print(*i)
         Tre = Algorytms.Tree
-
+        print(Algorytms.enemyArray)
         Tre.createTree(Tre)
 
         Tre.current = Tre.startNode
@@ -53,12 +55,11 @@ def updateFrame(): # оновлення фрейму
         Tre.setPriceInTree(Tre)
 
         Tre.current = Tre.startNode
-        print(Tre.current.coords)
-        for i in Algorytms.matrix:
-            print(*i)
+        # for i in Algorytms.matrix:
+        #     print(*i)
 
     Algorytms.moveEnemy()
-
+    Algorytms.enemyArray = []
     gv.PG_LIB.display.update()
     # for k in gv.dfsArrayOfPath:
     #     for i in range(len(k)):
@@ -66,12 +67,7 @@ def updateFrame(): # оновлення фрейму
     #             if k[i][j] == 1 or k[i][j] == 4:
     #                 gv.WINDOW.set_at((i,j), (255,0,0))
 
-
     # print(gv.enemyCount)
-
-
 
     # print(len(Algorytms.Matrix))
     # print(gv.currPoint)
-
-

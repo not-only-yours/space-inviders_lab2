@@ -87,3 +87,4 @@ enemyCount = 0
 currAlg = "ucs"
 pixelPath = []
 work = True
+time = 0

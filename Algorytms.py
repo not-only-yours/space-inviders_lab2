@@ -149,11 +149,13 @@ class Tree:
 
 
 def createVisitMatrix(matrix):
+    global enemyArray
     for i in range(len(matrix)):
         for j in range(len(matrix[i])):
             if matrix[i][j] == 2:
                 enemyArray.append([i, j])
-
+    if enemyArray:
+        enemyArray = [i for n, i in enumerate(enemyArray) if i not in enemyArray[:n]]
 
 def emptyMatrix(matr, cur):
     for i in range(0, len(matr)):
@@ -176,6 +178,7 @@ def fillMatrix(matrix):
 
 def moveEnemy():
     global arrayOfPath
+    matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50)] = 1
     for i in gv.ENEMIES[1:]:
         if gv.RANDOM_LIB.randint(1, 100) == 1 and 600 > i.x > 50:
             buf = gv.RANDOM_LIB.choice([1, 0])
@@ -191,6 +194,18 @@ def moveEnemy():
             if [int(gv.ENEMIES[0].x / 50), int(gv.ENEMIES[0].y / 50)] in enemyArray:
                 enemyArray.remove([int(gv.ENEMIES[0].x / 50), int(gv.ENEMIES[0].y / 50)])
 
+    if gv.GOOD_SHIP:
+        nextTurn = 0
+        value = matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50)]
+        if 0 <= gv.GOOD_SHIP.x / 50 + 1 < len(matrix) and 0 <= gv.GOOD_SHIP.y / 50 < len(matrix) and matrix[int(gv.GOOD_SHIP.y / 50) ][int(gv.GOOD_SHIP.x / 50 + 1)] > value:
+            nextTurn = 1
+        if 0 <= gv.GOOD_SHIP.x / 50 - 1 < len(matrix) and 0 <= gv.GOOD_SHIP.y / 50 < len(matrix) and matrix[int(gv.GOOD_SHIP.y / 50 )][int(gv.GOOD_SHIP.x / 50 - 1)] > value:
+            nextTurn = 2
+        if nextTurn!=0:
+            if nextTurn == 1:
+                gv.GOOD_SHIP.x = (gv.GOOD_SHIP.x / 50 + 1) * 50
+            else:
+                gv.GOOD_SHIP.x = (gv.GOOD_SHIP.x / 50 - 1) * 50
     arrayOfPath = []
     createVisitMatrix(matrix)
     fillMatrix(matrix)

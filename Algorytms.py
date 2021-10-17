@@ -123,10 +123,14 @@ class Tree:
                     matrix[i.coords[0]][i.coords[1]] = 0
                     checker = False
                 if not [i.coords[0], i.coords[1]] in enemies and checker:
-                    if max and matrix[i.coords[0]][i.coords[1]]!=2:
-                        matrix[i.coords[0]][i.coords[1]] += (matrix[self.current.coords[0]][self.current.coords[1]] + self.current.coords[0] * self.current.coords[1])
-                    elif  matrix[i.coords[0]][i.coords[1]]!=2:
-                        matrix[i.coords[0]][i.coords[1]] += (matrix[self.current.coords[0]][self.current.coords[1]] + self.current.coords[0] * self.current.coords[1])
+                    if max and matrix[i.coords[0]][i.coords[1]] != 2:
+                        matrix[i.coords[0]][i.coords[1]] += (
+                                matrix[self.current.coords[0]][self.current.coords[1]] + self.current.coords[0] *
+                                self.current.coords[1])
+                    elif matrix[i.coords[0]][i.coords[1]] != 2:
+                        matrix[i.coords[0]][i.coords[1]] += (
+                                matrix[self.current.coords[0]][self.current.coords[1]] + self.current.coords[0] *
+                                self.current.coords[1])
                 if visited[i.coords[0]][i.coords[1]] != 1:
                     self.before = self.current
                     self.current = i
@@ -156,6 +160,7 @@ def createVisitMatrix(matrix):
                 enemyArray.append([i, j])
     if enemyArray:
         enemyArray = [i for n, i in enumerate(enemyArray) if i not in enemyArray[:n]]
+
 
 def emptyMatrix(matr, cur):
     for i in range(0, len(matr)):
@@ -196,16 +201,38 @@ def moveEnemy():
 
     if gv.GOOD_SHIP:
         nextTurn = 0
+        leftval = 0
+        sum = 0
+        endl = True
         value = matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50)]
-        if 0 <= gv.GOOD_SHIP.x / 50 + 1 < len(matrix) and 0 <= gv.GOOD_SHIP.y / 50 < len(matrix) and matrix[int(gv.GOOD_SHIP.y / 50) ][int(gv.GOOD_SHIP.x / 50 + 1)] > value:
+        for i in range(0, len(matrix)):
+            if matrix[int(gv.GOOD_SHIP.y / 50)][i] != 1 and endl:
+                leftval += matrix[int(gv.GOOD_SHIP.y / 50)][i]
+                sum = leftval
+            else:
+                endl = False
+                sum += matrix[int(gv.GOOD_SHIP.y / 50)][i]
+        if int(gv.GOOD_SHIP.x / 50) - 1 > 0:
+            matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50) - 1] = leftval
+        if int(gv.GOOD_SHIP.x / 50) + 1 < len(matrix) - 1:
+            matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50) + 1] = sum - leftval
+        if 0 <= gv.GOOD_SHIP.x / 50 + 1 < len(matrix) and 0 <= gv.GOOD_SHIP.y / 50 < len(matrix) and \
+                matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50 + 1)] > value:
             nextTurn = 1
-        if 0 <= gv.GOOD_SHIP.x / 50 - 1 < len(matrix) and 0 <= gv.GOOD_SHIP.y / 50 < len(matrix) and matrix[int(gv.GOOD_SHIP.y / 50 )][int(gv.GOOD_SHIP.x / 50 - 1)] > value:
+        if 0 <= gv.GOOD_SHIP.x / 50 - 1 < len(matrix) and 0 <= gv.GOOD_SHIP.y / 50 < len(matrix) and \
+                matrix[int(gv.GOOD_SHIP.y / 50)][int(gv.GOOD_SHIP.x / 50 - 1)] > value:
             nextTurn = 2
-        if nextTurn!=0:
+        if nextTurn != 0:
             if nextTurn == 1:
                 gv.GOOD_SHIP.x = (gv.GOOD_SHIP.x / 50 + 1) * 50
             else:
                 gv.GOOD_SHIP.x = (gv.GOOD_SHIP.x / 50 - 1) * 50
+        if gv.ENEMIES and gv.RANDOM_LIB.randrange(1, 60) == 1:
+            print(gv.GOOD_SHIP.x, " ", gv.ENEMIES[0].x)
+            try:
+                gv.GOOD_SHIP.x = gv.ENEMIES[1].x
+            except:
+                print(len(gv.ENEMIES))
     arrayOfPath = []
     createVisitMatrix(matrix)
     fillMatrix(matrix)

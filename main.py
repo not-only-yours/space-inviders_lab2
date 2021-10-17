@@ -20,6 +20,9 @@ def main():
         if gv.LOST:  # час показання екрану програшу
             if gv.LOST_COUNT > gv.FPS * 3:
                 run = False
+                with open('somefile.txt', 'a') as the_file:
+                    the_file.write(
+                        f'level: {gv.LEVEL - 1} lost, time: {time.time() - gv.time} seconds, score: {gv.SCORE} \n')
             else:
                 continue
         if len(gv.ENEMIES) == 0:  # збільшення рівня складності
@@ -68,6 +71,11 @@ def main():
                 gv.GOOD_SHIP.health -= 10
                 gv.ENEMIES.remove(enemy)
                 gv.SCORE -= 20
+
+            if enemy.y + gv.BAD_SHIP_SIZEY + 10 > gv.HEIGHT:  # проходження ворогу до низу екрану
+                gv.LIVES -= 1
+                gv.ENEMIES.remove(enemy)
+                gv.SCORE -= 100
 
         for asteroid in gv.ASTEROIDS[:]:
             asteroid.move(0.8 * gv.ENEMY_VEL)

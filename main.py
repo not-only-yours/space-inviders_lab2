@@ -28,8 +28,7 @@ def main():
         if len(gv.ENEMIES) == 0:  # збільшення рівня складності
             if gv.LEVEL != 1:
                 with open('somefile.txt', 'a') as the_file:
-                    the_file.write(
-                        f'level: {gv.LEVEL - 1} passed, time: {time.time() - gv.time} seconds, score: {gv.SCORE} \n')
+                    the_file.write(f'level: {gv.LEVEL - 1} passed, time: {time.time() - gv.time} seconds, score: {gv.SCORE} \n')
             gv.LEVEL += 1
             gv.WAVE_LENGTH += 5
             for i in range(gv.WAVE_LENGTH):  # створення масиву з ворогів

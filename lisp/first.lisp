@@ -74,7 +74,7 @@
       0
     (+
       (* (car a) (car b))
-      (multiply (cdr a) (cdr b)))))
+      (multiplyTwo (cdr a) (cdr b)))))
 
 
 (defvar ansTwo (multiplyTwo workDataTaskOne workDataThree))
@@ -82,13 +82,14 @@
 (print ansTwo)
 
 
-(defun disp(a b)
-  (if (eq a nil)
-      0
-    (+
-      (square(- (car a) (car b))) 
-      (multiply (cdr a) (cdr b)))))
+(defun disp (a b)
+(if (eq a nil)
+	0     
+     (+
+       (square(- (car a) b))
+      (disp (cdr a) b)))
+)
+(defvar ansAns (disp workDataTaskOne ansTwo))
 
-(defvar ansAns disp(workDataTaskOne ansTwo))
+(print (/ ansAns (length workDataTaskOne)))
 
-(print ansAns)

@@ -73,10 +73,22 @@
   (if (eq a nil)
       0
     (+
-      (square (* (car a) (car b)))
+      (* (car a) (car b))
       (multiply (cdr a) (cdr b)))))
 
 
 (defvar ansTwo (multiplyTwo workDataTaskOne workDataThree))
 
 (print ansTwo)
+
+
+(defun disp(a b)
+  (if (eq a nil)
+      0
+    (+
+      (square(- (car a) (car b))) 
+      (multiply (cdr a) (cdr b)))))
+
+(defvar ansAns disp(workDataTaskOne ansTwo))
+
+(print ansAns)

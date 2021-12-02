@@ -1,7 +1,0 @@
-level: 1 passed, time: 35.00680160522461 seconds, score: -100 
-level: 1 passed, time: 23.217915296554565 seconds, score: 500 
-level: 2 passed, time: 23.36043667793274 seconds, score: 1250 
-level: 3 passed, time: 30.504000186920166 seconds, score: 1580 
-level: 4 lost, time: 23.271347761154175 seconds, score: 1980 
-level: 1 passed, time: 30.454834699630737 seconds, score: 50 
-level: 1 passed, time: 19.82215452194214 seconds, score: 500 

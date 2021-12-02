@@ -1,7 +1,4 @@
-import pygame
-import random
-from Game.data import *
-from Game.Objects import *
+import numpy as np
 
 def define_DQN_params():
 	params = {}

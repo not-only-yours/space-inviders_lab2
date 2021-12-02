@@ -128,6 +128,9 @@ class enemy(Gameobject):
 	def in_screen(self):
 		return self.posy < WIN_HEIGHT
 
+	def in_game_part(self):
+		return self.posy + 200 < WIN_HEIGHT
+
 
 def enemy_shoot(enemy,probability,lasers):
 	if random.random() < probability:

@@ -59,18 +59,10 @@ class DQNAgent:
 
         for transition in batch:
             current_states = np.array([transition[0] for transition in batch])
-        # some times transition[0] is already flat (no idea why), so :
-        # if isinstance(transition[0][0],tuple):
-        # 	current_states = np.array([flatten_list(transition[0],WIN_WIDTH) for transition in batch])
-        # else:
-        # 	current_states = np.array([transition[0] for transition in batch])
 
         current_qs_values = self.model.predict(current_states)
         next_states = np.array([transition[3] for transition in batch])
-        # if isinstance(transition[3][0],tuple):
-        # 	next_states = np.array([flatten_list(transition[3],WIN_WIDTH) for transition in batch])
-        # else:
-        # 	next_states = np.array([transition[3] for transition in batch])
+
 
         next_qs_values = self.target_model.predict(next_states)
         y = []
@@ -106,10 +98,6 @@ class Space_env:
     ENEMY_KILLED_REWARD = 1  # 10 - value given also in the main bloc
     PLAYER_ALIVE_REWARD = .0001  # 1
 
-    # ACTIONS/STATES
-    # STATE_SPACE = 14  # (enemy position - player position) 10 times (10 enemies)
-    # + 4 min(laser enemy position - player position) (the 4 closest lasers)
-    # ACTION_SPACE = 4 # Left right still shoot
     ACTIONS = [0, 1, 2, 3]
     TOTAL_EPISODES = define_DQN_params()['total_episodes']
 
@@ -121,9 +109,7 @@ class Space_env:
 
         self.episode_step = episode
 
-        # Observation
         observation = []
-        # enemy relative distance (10) > (7)
         enemy_rel_dist = []
         for enemy_ in self.enemies:
             enemy_rel_dist.append(enemy_ - self.player)
@@ -139,9 +125,6 @@ class Space_env:
 
         # direction of enemy: +1 if moving right, -1 left (10) > (7)
         direction_enemy = [.5] * NB_ENEMIES
-
-        # Vel of player (1)
-        # direction_player = [1]
 
         observation = enemy_rel_dist + closest_enemy_lasers + player_pos + player_lasers_pos + direction_enemy
 
@@ -219,16 +202,6 @@ class Space_env:
 
         new_observation = enemy_rel_dist + closest_enemy_lasers + player_pos + player_lasers_pos + direction_enemy
 
-        # if frame%500==0:
-        # 	with open('enemy_rel_dist.txt','a') as f:
-        # 			f.write(str(enemy_rel_dist)+'\n')
-
-        # 	with open('closest_enemy_lasers.txt','a') as f:
-        # 			f.write(str(closest_enemy_lasers)+'\n')
-
-        # 	with open('player_lasers_pos.txt','a') as f:
-        # 			f.write(str(player_lasers_pos)+'\n')
-
         # Rewards
         reward = 0
         reward_ = ''
@@ -240,23 +213,7 @@ class Space_env:
             reward_ = 'PLAYER IS KILLED'
 
         for enemy_ in self.enemies:
-            # if self.player.is_hit(self.enemy_shoots):	# Player is hit
-            # 	reward = self.PLAYER_HIT_REWARD
-            # 	reward_ = 'PLAYER IS HIT'
-            # elif not self.player.is_alive:          # Player is killed
-            # 	reward = self.DEATH_REWARD
-            # 	reward_ = 'PLAYER IS KILLED'
-            # elif enemy_.is_hit(self.player_shoots):                   # Enemy is hit
-            # 	reward = self.ENEMY_HIT_REWARD
-            # 	reward_ = 'ENEMY IS HIT'
-            # elif not enemy_.is_alive:               # Enemy is killed
-            # 	reward = self.ENEMY_KILLED_REWARD
-            # 	reward_ = 'ENEMY IS KILLED'
-            # else:
-            # 	reward = self.PLAYER_ALIVE_REWARD   # Player safe
-            # 	reward_ = 'PLAYER ALIVE'
 
-            # if self.player.is_hit(self.enemy_shoots):	# Player is hit
             if self.player.hit_cond:
                 for _ in range(self.player.hit):
                     reward += self.PLAYER_HIT_REWARD
@@ -294,9 +251,6 @@ class Space_env:
 def redrawGameWindow(win, agent, enemies, episode, player_shoots, enemy_shoots, options=[]):
     global SCORE
     win.blit(BG, (0, 0))
-    # keys = pygame.key.get_pressed()
-    # if keys[pygame.K_t]:
-    # 	done = True
 
     if agent.is_alive:
         agent.draw(win, player_shoots)
@@ -350,7 +304,7 @@ def start_game():
             HIGHEST_SCORE = max(scores)
     print(len(episodes), len(scores))
     plt.plot(episodes, scores)
-	#plt.show()
+    #plt.show()
     SCORE = 0
 
     agent = player((WIN_WIDTH - player_width) / 2, WIN_HEIGHT - player_height, player_img)
@@ -412,39 +366,18 @@ for episode in range(1, params['total_episodes'] + 1):
                 print('BUG FIXED')
                 done = True
 
-        # DEBUG ITER
 
-        # if frame%1000==0:
-        # var='w'
-        # else:
-        # var = 'a'
-        # with open('debug.txt', var) as f:
-        # f.write('\n')
-        # f.write('A : debug_iter : REWARD : '+ str(reward)  + 'REWARD_ ' + str(options) + ' DEBUG ITER '+ str(debug_iter) + '\n')
-
-        # if done:
-        #     with open('debug.txt', 'a') as f:
-        #         f.write('DONE:  ' + str(done) + '\n')
-        #         f.write(' \n')
 
         env.render(options)
 
         transition = (current_state, action, reward, next_state, done)
 
-        # DEBUG ITER
-        # with open('debug.txt', var) as f:
-        # f.write('BBBBB' +'\n')
+
         if frame % 10 == 0:
             agent.update_replay_memory(transition)
 
-        # if frame % 500 == 0:
-        #     with open('STATES.txt', 'a') as f:
-        #         f.write(str(transition[0]) + '   ' + str(transition[1]) + '   ' + str(transition[2]) + '\n')
-
         agent.train(done)
-        # DEBUG ITER
-        # with open('debug.txt', var) as f:
-        # f.write('CCCCCC' +'\n')
+
         meanQ = np.mean(agent.get_q_values(np.array([current_state, ])))
 
         current_state = next_state
@@ -453,13 +386,6 @@ for episode in range(1, params['total_episodes'] + 1):
         if event.type == pygame.QUIT:
             quit = True
             done = True
-
-    # DEBUG ITER
-    # with open('debug.txt', var) as f:
-    # f.write('DDDDDD' +'\n')
-    # if len(agent.replay_memory)>params['min_replay_memory_size']:
-    # 	with open('meanQ.txt','a') as file:
-    # 			file.write(str(agent.meanq)+'\n')
 
     if episode % params['save_weights_every'] == 0:
         agent.model.save_weights(params['weights_path'])

@@ -22,27 +22,13 @@ class Gameobject:
 	def __sub__(self, other):
 		sign = np.sign(other.posx-self.posx)
 		return sign*np.sqrt((other.posx-self.posx)**2+(other.posy - self.posy)**2)/WIN_HEIGHT
-		# return (sign*(other.posx-self.posx), other.posy - self.posy)
 
 
-	# def is_hit(self,lasers):
-	# 	for laser in lasers:			
-	# 		if touch(laser,self):
-	# 			# print('TOUCHED')
-	# 			return True
-	# 		else:
-	# 			return False
 
 class player(Gameobject):
 	def __init__(self,*args,**kwargs):
 		super().__init__(*args,**kwargs)
-		# self.lasers = []
-		# self.lasers_tracked = []
 
-	# def shoot(self):
-	# 	X = self.posx + (self.width-laser_width)/2
-	# 	Y = self.posy-laser_height
-	# 	self.lasers.append(Gameobject(X,Y,laser_player_img))
 
 	def draw(self,win,player_shoots):
 		for laser in player_shoots:
@@ -67,32 +53,17 @@ class player(Gameobject):
 	def closest_lasers(self,lasers_positions,treshold):
 		if len(lasers_positions)>0:			
 			result=sorted(lasers_positions, key=abs)[:treshold]
-		    # result =sorted([np.abs(elt) for elt in lasers_positions])[:treshold]
+
 		else:
 		   	result=[]
 		return result
 
-	# def track_laser(self):
-	# 	if len(self.lasers_tracked)< NB_LASERS_TRACKED:
-	# 		self.lasers_tracked.append(self.lasers[-1])
-
-	# def get_lasers_positions(self,nb_lasers):
-	# 	y_positions = [laser.posy/WIN_HEIGHT for laser in self.lasers_tracked]
-	# 	while len(y_positions)<nb_lasers:
-	# 		y_positions.append(0)
-	# 	return y_positions
 
 
 class enemy(Gameobject):
 	def __init__(self,*args,**kwargs):
 		super().__init__(*args,**kwargs)
-		# self.lasers = []
 
-	# def shoot(self,probability):
-	# 	if random.random() < probability:
-	# 		X = self.posx + (self.width-laser_width)/2
-	# 		Y = self.posy+enemy_height
-	# 		self.lasers.append(Gameobject(X,Y,laser_enemy_img))
 
 	def draw(self,win,lasers):
 		for laser in lasers:
@@ -117,8 +88,7 @@ class enemy(Gameobject):
 	def collision(self,laser_list):
 		for laser in laser_list:
 			if touch(laser,self):
-				# if laser in player.lasers_tracked:
-					# player.lasers_tracked.remove(laser)
+
 				laser_list.remove(laser)
 				self.hit +=1
 				self.hit_cond=True

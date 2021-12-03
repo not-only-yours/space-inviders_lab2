@@ -14,8 +14,8 @@ YELLOW = (255, 250, 149)
 
 # PLAYERS
 NB_ENEMIES= 7
-ENEMY_HEALTH = 1
-PLAYER_HEALTH = 5
+ENEMY_HEALTH = 3
+PLAYER_HEALTH = 7
 PROBABILITY_SHOOTING = 1/150
 NB_LASERS_TRACKED = 3
 
@@ -44,13 +44,14 @@ with open('Game/SCORE.txt','r') as file:
 pygame.init()
 win = pygame.display.set_mode((WIN_WIDTH+MENU_WIDTH,WIN_HEIGHT))
 pygame.display.set_caption('Spaceship Invaders')
-font = pygame.font.SysFont('cambria', 25,italic=True)
-font2 = pygame.font.SysFont('cambria', 25,bold=True)
-font3 = pygame.font.SysFont('cambria', 50,bold=True,italic=True)
-font4 = pygame.font.SysFont('cambria', 10,bold=False)
+font = pygame.font.SysFont('Times New Roman', 25)
+font2 = pygame.font.SysFont('Times New Roman', 25)
+font3 = pygame.font.SysFont('Times New Roman', 50)
+font4 = pygame.font.SysFont('Times New Roman', 10)
 
 # imgs
 player_img = pygame.image.load('Game/Imgs/spaceship.png')
+player_img = pygame.transform.scale(player_img, (75,75))
 laser_player_img = pygame.image.load('Game/Imgs/laser_player.png')
 enemy_img = pygame.image.load('Game/Imgs/enemy.png')
 laser_enemy_img = pygame.image.load('Game/Imgs/laser_enemy.png')
@@ -61,4 +62,5 @@ enemy_width,enemy_height = enemy_img.get_rect().size
 laser_width,laser_height = laser_player_img.get_rect().size
 
 #  Background
-BG = pygame.image.load('Game/Imgs/space.jpg')
+BG = pygame.image.load('Game/Imgs/space.png')
+BG = pygame.transform.scale(BG, (WIN_WIDTH + 200, WIN_HEIGHT))

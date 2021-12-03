@@ -172,9 +172,6 @@ class Space_env:
 
             # Enemy actions
             for enemy_ in self.enemies:
-                if not enemy_.in_screen():
-                    agent.is_alive = False
-                    #reward = self.DEATH_REWARD
                 if enemy_.is_alive and enemy_.in_screen():
                     enemy_.move()
                     # enemy_.shoot(PROBABILITY_SHOOTING)
@@ -277,10 +274,6 @@ class Space_env:
                 reward = self.ENEMY_KILLED_REWARD
                 reward_ = 'ENEMY IS KILLED', reward
 
-            if not enemy_.in_game_part():
-                reward = self.ENEMY_KILLED_REWARD
-                reward_ = 'ENEMY IS KILLED', reward
-
         # Done
         done = False
         if reward == self.DEATH_REWARD or self.episode_step > self.TOTAL_EPISODES:
@@ -333,6 +326,12 @@ def redrawGameWindow(win, agent, enemies, episode, player_shoots, enemy_shoots, 
         [win.blit(txt, (words_x, y)) for txt, y in zip(texts, words_y)]
         [win.blit(txt, (words2_x, y)) for txt, y in zip(texts2, words2_y)]
 
+    else:
+        text = font3.render('GAME OVER ', 1, YELLOW)
+        txt_width, txt_height = text.get_rect().size
+
+        win.blit(text, ((WIN_WIDTH + MENU_WIDTH - txt_width) / 2, (WIN_HEIGHT - txt_height) / 2))
+
     pygame.display.update()
 
 
@@ -349,9 +348,9 @@ def start_game():
             episodes = [int(reader[i][0].split(' ')[1]) for i in othind]
             scores = [int(reader[i][0]) for i in ind]
             HIGHEST_SCORE = max(scores)
-    #print(len(episodes), len(scores))
+    print(len(episodes), len(scores))
     plt.plot(episodes, scores)
-    #plt.show()
+	#plt.show()
     SCORE = 0
 
     agent = player((WIN_WIDTH - player_width) / 2, WIN_HEIGHT - player_height, player_img)
